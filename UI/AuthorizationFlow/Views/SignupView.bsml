@@ -1,0 +1,10 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+	>
+  <vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='70' pref-height='75' pad='3' child-align='MiddleCenter'>
+    <text text='Sign Up...' ignore-layout='true' font-size='10' font-align='Center'/>
+    <string-setting text='Username' />
+    <string-setting text='Password'/>
+    <button text='Sign Up' font-size='10' pref-height='13' pref-width='45' on-click='signup'/>
+  </vertical>
+</bg>

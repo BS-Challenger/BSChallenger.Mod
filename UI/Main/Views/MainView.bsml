@@ -1,0 +1,60 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+	>
+  <vertical>
+	  <horizontal id='rankingSelector' horizontal-fit="PreferredSize" spacing="2.5">
+      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-25' anchor-pos-y='-1'/>
+      <img src='https://cdn.assets.beatleader.xyz/PAULclan.png' pref-width='6' pref-height='6'/>
+      <text text='Challenge Community' />
+      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='24' anchor-pos-y='-1'/>
+	  </horizontal>
+    <horizontal bg='panel-top' pref-height='16' ignore-layout='true' anchor-pos-y='20' pad='2' pad-left='12' pad-right='12'>
+      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-38' anchor-pos-y='-4'/>
+      <horizontal pref-width='30'>
+        <custom-list show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelsList' pad='10' visible-cells='7'>
+          <horizontal id='cell'>
+            <horizontal bg='round-rect-panel' pref-height='10'>
+              <horizontal bg='panel-top' pref-height='10' pref-width='15' pad='2'>
+                <img src='https://cdn.betterttv.net/emote/6097c0ef39b5010444d0e517/3x.png' preserve-aspect='true'/>
+              </horizontal>
+            </horizontal>
+          </horizontal>
+        </custom-list>
+      </horizontal>
+      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='38' anchor-pos-y='-4'/>
+    </horizontal>
+    <horizontal spacing='20' pad-top='10'>
+        <vertical spacing ='5' bg='panel-top' pad='5' vertical-fit="PreferredSize">
+          <button text='Scan' pref-width='20' pref-height='10' font-size='6' click-event="OpenScanModal"/>
+          <button text='Progress' pref-width='25' pref-height='10' font-size='6' click-event="OpenProgressModal"/>
+        </vertical>
+        <vertical id='stats' bg='panel-top' pad='5' spacing='3' size-delta-x='20' size-delta-y='40'>
+            <text text='Some Stats'/>
+            <text text='Some More Stats'/>
+            <text text='Even More Stats'/>
+            <text text='A tad bit moreStats'/>
+        </vertical>
+    </horizontal>
+    <modal hide-event='CloseProgressModal' show-event='OpenProgressModal' size-delta-x='70' size-delta-y='80' clickerino-offerino-closerino='true'>
+      <vertical>
+        <horizontal horizontal-fit="PreferredSize">
+          <button text='x' click-event='CloseProgressModal' ignore-layout='true' anchor-pos-x='-12' anchor-pos-y='-4'/>
+          <text text='Progress' font-size='12' horizontal-fit="PreferredSize"/>
+        </horizontal>
+        <custom-list show-scrollbar='true' stick-scrolling='true' pref-height='60' pref-width='50' contents='levels' pad-bottom='10'>
+          <horizontal  pref-height='4' spacing='34'>
+            <text text='~text'/>
+            <img size-delta-y='4' size-delta-x='30' ignore-layout='true' src='BSChallengeRanking.UI.Resources.pixel.png'/>
+            <text text='~count'/>
+          </horizontal>
+        </custom-list>
+      </vertical>
+    </modal>
+    <modal hide-event='CloseScanModal' show-event='OpenScanModal' size-delta-x='50' size-delta-y='50' clickerino-offerino-closerino='true'>
+      <vertical>
+        <text text='Performing Scan' anchor-pos-y='-8' font-size='7'/>
+        <loading size-delta-x='20' size-delta-y='20' ignore-layout='true'/>
+      </vertical>
+    </modal>
+  </vertical>
+</bg>

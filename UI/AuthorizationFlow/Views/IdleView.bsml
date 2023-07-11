@@ -1,0 +1,8 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+	>
+  <vertical bg='panel-top' vertical-fit='PreferredSize' pref-height='45' pad='3'>
+    <text text='Checking Status....' ignore-layout='true' font-size='10'/>
+    <loading size-delta-x='25' size-delta-y='25' ignore-layout='true' anchor-pos-y='-10'/>
+  </vertical>
+</bg>

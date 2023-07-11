@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
-  "id": "BSChallengeRanking",
-  "name": "BSChallengeRanking",
+  "id": "BSChallenger",
+  "name": "BSChallenger",
   "author": "FutureMapper, Goobwabber",
   "version": "1.0.0",
   "description": "",

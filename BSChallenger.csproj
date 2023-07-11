@@ -8,9 +8,10 @@
     <ProjectGuid>{FB1CF983-4CE2-427F-8BA2-46FB8201D2E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BSChallengeRanking</RootNamespace>
-    <AssemblyName>BSChallengeRanking</AssemblyName>
+    <RootNamespace>BSChallenger</RootNamespace>
+    <AssemblyName>BSChallenger</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
@@ -119,14 +120,12 @@
     <Compile Include="API\User\LocalRanking.cs" />
     <Compile Include="API\Map.cs" />
     <Compile Include="API\Ranking.cs" />
-    <Compile Include="Installers\BSChallengeRankingMenuInstaller.cs" />
+    <Compile Include="Installers\BSChallengerMenuInstaller.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\BSChallengeRankingAPIProvider.cs" />
     <Compile Include="UI\AuthorizationFlow\AuthorizationFlow.cs" />
-    <Compile Include="UI\AuthorizationFlow\Views\IdleView.cs" />
-    <Compile Include="UI\AuthorizationFlow\Views\LoginView.cs" />
-    <Compile Include="UI\AuthorizationFlow\Views\SignupView.cs" />
+    <Compile Include="UI\AuthorizationFlow\Views\AuthView.cs" />
     <Compile Include="UI\Main\BSChallengeRankingFlowCoordinator.cs" />
     <Compile Include="UI\Main\CellBehaviour.cs" />
     <Compile Include="UI\Main\Views\LevelView.cs" />
@@ -137,21 +136,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
-    <None Include="BSChallengeRanking.csproj.user" Condition="Exists('BSChallengeRanking.csproj.user')" />
+    <None Include="BSChallenger.csproj.user" Condition="Exists('BSChallenger.csproj.user')" />
     <EmbeddedResource Include="UI\Main\Views\MainView.bsml">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Main\Views\LevelView.bsml">
       <DependentUpon>LevelView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\AuthorizationFlow\Views\IdleView.bsml">
-      <DependentUpon>IdleView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\AuthorizationFlow\Views\LoginView.bsml">
-      <DependentUpon>LoginView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\AuthorizationFlow\Views\SignupView.bsml">
-      <DependentUpon>SignupView.cs</DependentUpon>
+    <EmbeddedResource Include="UI\AuthorizationFlow\Views\AuthView.bsml">
+      <DependentUpon>AuthView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

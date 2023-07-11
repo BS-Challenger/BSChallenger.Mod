@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BSChallengeRanking.UI.Main
+namespace BSChallenger.UI.Main
 {
 	internal class CellBehaviour : MonoBehaviour
 	{

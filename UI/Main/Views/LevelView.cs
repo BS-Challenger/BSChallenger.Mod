@@ -2,14 +2,14 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
-using BSChallengeRanking.API;
+using BSChallenger.API;
 using HMUI;
 using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace BSChallengeRanking.UI.Main.Views
+namespace BSChallenger.UI.Main.Views
 {
 	[HotReload(RelativePathToLayout = @"LevelView.bsml")]
 	[ViewDefinition("BSChallengeRanking.UI.Main.Views.LevelView.bsml")]

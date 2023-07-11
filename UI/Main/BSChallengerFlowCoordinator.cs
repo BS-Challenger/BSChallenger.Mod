@@ -1,11 +1,11 @@
 ﻿using BeatSaberMarkupLanguage;
-using BSChallengeRanking.UI.Main.Views;
+using BSChallenger.UI.Main.Views;
 using HMUI;
 using Zenject;
 
-namespace BSChallengeRanking.UI.Main
+namespace BSChallenger.UI.Main
 {
-	internal class BSChallengeRankingFlowCoordinator : FlowCoordinator
+	internal class BSChallengerFlowCoordinator : FlowCoordinator
 	{
 		private MainView _mainView;
 		private LevelView _levelView;
@@ -21,7 +21,7 @@ namespace BSChallengeRanking.UI.Main
 		{
 			if (firstActivation)
 			{
-				SetTitle("Beat Saber Challenge Ranking");
+				SetTitle("Beat Saber Challenger");
 				showBackButton = true;
 				ProvideInitialViewControllers(_mainView, _levelView);
 			}

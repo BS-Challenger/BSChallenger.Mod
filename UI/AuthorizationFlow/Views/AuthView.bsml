@@ -1,7 +1,11 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 	>
-  <vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='70' pref-height='75' pad='3' child-align='MiddleCenter'>
+  <vertical id='idleScreen' bg='panel-top' vertical-fit='PreferredSize' pref-height='45' pad='3'>
+    <text id='text' text='Checking Status....' ignore-layout='true' font-size='10'/>
+    <loading size-delta-x='25' size-delta-y='25' ignore-layout='true' anchor-pos-y='-10'/>
+  </vertical>
+  <vertical id='signupScreen' bg='panel-top' vertical-fit='PreferredSize' pref-width='70' pref-height='75' pad='3' child-align='MiddleCenter'>
     <text text='Sign Up...' ignore-layout='true' font-size='10' font-align='Center'/>
     <string-setting text='Username' />
     <string-setting text='Password'/>

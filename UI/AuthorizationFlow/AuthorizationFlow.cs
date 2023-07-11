@@ -1,26 +1,21 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
-using BSChallengeRanking.UI.AuthorizationFlow.Views;
-using BSChallengeRanking.UI.Main;
+using BSChallenger.UI.AuthorizationFlow.Views;
+using BSChallenger.UI.Main;
 using HMUI;
 using Zenject;
 
-namespace BSChallengeRanking.UI.AuthorizationFlow
+namespace BSChallenger.UI.AuthorizationFlow
 {
 	internal class AuthorizationFlow : FlowCoordinator
 	{
-		private BSChallengeRankingFlowCoordinator _rankingFlow;
-		private IdleView _idleView;
-		private LoginView _loginView;
-		private SignupView _signupView;
-		private ViewController _activeView;
+		private BSChallengerFlowCoordinator _rankingFlow;
+		private AuthView _authView;
 
 		[Inject]
-		internal void Construct(IdleView idleViewController, LoginView loginViewController, SignupView signUpViewController, BSChallengeRankingFlowCoordinator rankingFlowCoordinator)
+		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator)
 		{
-			_idleView = idleViewController;
-			_loginView = loginViewController;
-			_signupView = signUpViewController;
+			_authView = authViewController;
 			_rankingFlow = rankingFlowCoordinator;
 			MenuButtons.instance.RegisterButton(
 				new MenuButton("BSChallengeRanking", () =>
@@ -36,38 +31,19 @@ namespace BSChallengeRanking.UI.AuthorizationFlow
 			{
 				SetTitle("Authorizing...");
 				showBackButton = true;
-				_activeView = _idleView;
-				ProvideInitialViewControllers(_idleView);
+				ProvideInitialViewControllers(_authView);
 			}
 		}
 
-		internal void StatusCheckComplete(StatusResult result)
+		internal void GoToRankingFlow()
 		{
-			switch(result)
-			{
-				case StatusResult.Success:
-					BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal, true);
-					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow, null, ViewController.AnimationDirection.Horizontal, true);
-					break;
-				case StatusResult.NeedsLogin:
-					PresentViewController(_loginView);
-					break;
-				case StatusResult.NoAccount:
-					PresentViewController(_signupView);
-					break;
-			}
+			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal, true);
+			BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow, null, ViewController.AnimationDirection.Horizontal, true);
 		}
 
 		protected override void BackButtonWasPressed(ViewController topViewController)
 		{
 			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this);
-		}
-
-		internal enum StatusResult
-		{
-			NoAccount,
-			NeedsLogin,
-			Success
 		}
 	}
 }

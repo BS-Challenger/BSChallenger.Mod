@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BSChallengeRanking.API.User
+namespace BSChallenger.API.User
 {
 	internal class LocalLevel
 	{

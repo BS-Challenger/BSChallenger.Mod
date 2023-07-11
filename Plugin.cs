@@ -1,9 +1,9 @@
-﻿using BSChallengeRanking.Installers;
+﻿using BSChallenger.Installers;
 using IPA;
 using SiraUtil.Zenject;
 using IPALogger = IPA.Logging.Logger;
 
-namespace BSChallengeRanking
+namespace BSChallenger
 {
 	[Plugin(RuntimeOptions.SingleStartInit)]
 	public class Plugin
@@ -16,8 +16,7 @@ namespace BSChallengeRanking
 		{
 			Instance = this;
 			Log = logger;
-			zenjector.Install<BSChallengeRankingMenuInstaller>(Location.Menu);
+			zenjector.Install<BSChallengerMenuInstaller>(Location.Menu);
 		}
-
 	}
 }

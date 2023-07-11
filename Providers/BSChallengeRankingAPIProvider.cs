@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BSChallengeRanking.Providers
+namespace BSChallenger.Providers
 {
 	internal class BSChallengeRankingAPIProvider : MonoBehaviour
 	{

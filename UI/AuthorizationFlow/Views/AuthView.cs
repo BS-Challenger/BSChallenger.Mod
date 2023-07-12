@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
+using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
 using System;
@@ -30,6 +31,9 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 		internal LoadingType loadingToUse = LoadingType.CheckingForAccount;
 
+		[UIObject("loginScreen")]
+		private GameObject _login;
+
 		[UIObject("signupScreen")]
 		private GameObject _signup;
 
@@ -38,6 +42,18 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 		[UIComponent("text")]
 		private TextMeshProUGUI text;
+
+		[UIObject("usernameObj")]
+		private GameObject signupUsername;
+
+		[UIObject("passwordObj")]
+		private GameObject signupPassword;
+
+		[UIObject("usernameObj2")]
+		private GameObject loginUsername;
+
+		[UIObject("passwordObj2")]
+		private GameObject loginPassword;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -55,7 +71,13 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
 			_idle.SetActive(true);
+			_login.SetActive(false);
 			_signup.SetActive(false);
+
+			BSMLUtils.FixStringSetting(signupUsername.transform);
+			BSMLUtils.FixStringSetting(signupPassword.transform);
+			BSMLUtils.FixStringSetting(loginUsername.transform);
+			BSMLUtils.FixStringSetting(loginPassword.transform);
 		}
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -72,6 +94,7 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 			{
 				case LoadingType.CheckingForAccount:
 					_signup.SetActive(true);
+					_login.SetActive(false);
 					_idle.SetActive(false);
 					break;
 				case LoadingType.LoggingIn:
@@ -88,7 +111,25 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		{
 			_signup.SetActive(false);
 			_idle.SetActive(true);
+			_login.SetActive(false);
 			GoTo(LoadingType.SigningUp);
+		}
+
+		[UIAction("login")]
+		private void Login()
+		{
+			_signup.SetActive(false);
+			_idle.SetActive(true);
+			_login.SetActive(false);
+			GoTo(LoadingType.LoggingIn);
+		}
+
+		[UIAction("goToLogin")]
+		private void GoToLogin()
+		{
+			_signup.SetActive(false);
+			_idle.SetActive(false);
+			_login.SetActive(true);
 		}
 
 		private void GoTo(LoadingType loadingToUse)

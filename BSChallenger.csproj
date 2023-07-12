@@ -126,10 +126,11 @@
     <Compile Include="Providers\BSChallengeRankingAPIProvider.cs" />
     <Compile Include="UI\AuthorizationFlow\AuthorizationFlow.cs" />
     <Compile Include="UI\AuthorizationFlow\Views\AuthView.cs" />
-    <Compile Include="UI\Main\BSChallengeRankingFlowCoordinator.cs" />
+    <Compile Include="UI\Main\BSChallengerFlowCoordinator.cs" />
     <Compile Include="UI\Main\CellBehaviour.cs" />
     <Compile Include="UI\Main\Views\LevelView.cs" />
     <Compile Include="UI\Main\Views\MainView.cs" />
+    <Compile Include="Utils\BSMLUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />

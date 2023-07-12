@@ -10,7 +10,7 @@
       <custom-list contents="maps" show-scrollbar='true' stick-scrolling='true' pref-height='60' pref-width='50' cell-size='11'>
         <horizontal id='cell'>
           <horizontal child-expand-height="false" pref-width="50" bg='panel-top' pref-height='10'>
-            <img src="BSChallengeRanking.UI.Resources.pixel.png" preserve-aspect="true" size-delta-x='6' size-delta-y='6' anchor-pos-x='-20' ignore-layout='true'/>
+            <img src="BSChallenger.UI.Resources.pixel.png" preserve-aspect="true" size-delta-x='6' size-delta-y='6' anchor-pos-x='-20' ignore-layout='true'/>
             <vertical ignore-layout='true' anchor-pos-x='-7' anchor-pos-y='0.2' pad='2'>
               <text text="The map of all time" font-size="2.5"/>
               <text text="[MapperName]" font-size="2"/>
@@ -21,7 +21,7 @@
     </horizontal>
     <vertical bg="panel-top" pref-width="40">
       <horizontal anchor-pos-y="26" ignore-layout="true" spacing="5">
-        <img src="BSChallengeRanking.UI.Resources.pixel.png" preserve-aspect="true" size-delta-x='10' size-delta-y='10' anchor-pos-x='-12' ignore-layout='true'/>
+        <img src="BSChallenger.UI.Resources.pixel.png" preserve-aspect="true" size-delta-x='10' size-delta-y='10' anchor-pos-x='-12' ignore-layout='true'/>
         <vertical pad-left='6'>
           <text text="The map of all time" font-size="3"/>
           <text text="[MapperName]" font-size="3"/>

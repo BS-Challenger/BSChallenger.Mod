@@ -1,14 +1,17 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 	>
-  <vertical>
+  <vertical spacing='1'>
 	  <horizontal id='rankingSelector' horizontal-fit="PreferredSize" spacing="2.5">
       <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-25' anchor-pos-y='-1'/>
       <img src='https://cdn.assets.beatleader.xyz/PAULclan.png' pref-width='6' pref-height='6'/>
       <text text='Challenge Community' />
       <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='24' anchor-pos-y='-1'/>
 	  </horizontal>
-    <horizontal bg='panel-top' pref-height='16' ignore-layout='true' anchor-pos-y='20' pad='2' pad-left='12' pad-right='12'>
+    <horizontal pad-bottom='5' pref-height='13'>
+      <clickable-text text='You have 1 issue with your account!' default-color='red' highlight-color='orange' font-align='Center' click-event='OpenLinkModal'/>
+    </horizontal>
+    <horizontal bg='panel-top' pref-height='16' ignore-layout='true' anchor-pos-y='15' pad='2' pad-left='12' pad-right='12'>
       <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-38' anchor-pos-y='-4'/>
       <horizontal pref-width='30'>
         <custom-list show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelsList' pad='10' visible-cells='7'>
@@ -44,7 +47,7 @@
         <custom-list show-scrollbar='true' stick-scrolling='true' pref-height='60' pref-width='50' contents='levels' pad-bottom='10'>
           <horizontal  pref-height='4' spacing='34'>
             <text text='~text'/>
-            <img size-delta-y='4' size-delta-x='30' ignore-layout='true' src='BSChallengeRanking.UI.Resources.pixel.png'/>
+            <img size-delta-y='4' size-delta-x='30' ignore-layout='true' src='BSChallenger.UI.Resources.pixel.png'/>
             <text text='~count'/>
           </horizontal>
         </custom-list>
@@ -54,6 +57,17 @@
       <vertical>
         <text text='Performing Scan' anchor-pos-y='-8' font-size='7'/>
         <loading size-delta-x='20' size-delta-y='20' ignore-layout='true'/>
+      </vertical>
+    </modal>
+    <modal hide-event='CloseLinkModal' show-event='OpenLinkModal' size-delta-x='100' size-delta-y='50' clickerino-offerino-closerino='true'>
+      <vertical pad='5' pref-width='95' vertical-fit='PreferredSize'>
+        <horizontal horizontal-fit='PreferredSize'>
+          <text text=" - You need to link your" pref-width="10"  word-wrapping='true'/>
+          <text text=" Beat Leader " color="#ff6b6b" word-wrapping='true'/>
+          <text text=" account to your BSChallenger Account" word-wrapping='true' rich-text='true'/>
+        </horizontal>
+        <text text=' - This will require you to take your headset off in order to login to Beatleader and authorize' word-wrapping='true'/>
+        <button text='Open Link' font-size='7' pad-top='10'/>
       </vertical>
     </modal>
   </vertical>

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.API
 {
-	internal class Map
+	public class Map
 	{
-		internal string beatsaverID;
-		internal string hash;
-		internal string characteristic;
-		internal string difficulty;
+		public string hash;
+		public string characteristic;
+		public string difficulty;
 	}
 }

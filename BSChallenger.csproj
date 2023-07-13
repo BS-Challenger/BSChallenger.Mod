@@ -41,9 +41,19 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeatSaverSharp, Version=3.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>$(BeatSaberDir)\Libs\BeatSaverSharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="BSML, Version=1.6.10.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="SiraUtil, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -113,13 +123,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\User\LocalLevel.cs" />
-    <Compile Include="API\User\ScanRequest.cs" />
-    <Compile Include="API\User\ScanResult.cs" />
     <Compile Include="API\Level.cs" />
-    <Compile Include="API\User\LocalRanking.cs" />
     <Compile Include="API\Map.cs" />
     <Compile Include="API\Ranking.cs" />
+    <Compile Include="API\User\NamePasswordRequest.cs" />
     <Compile Include="Installers\BSChallengerMenuInstaller.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,6 +137,7 @@
     <Compile Include="UI\Main\CellBehaviour.cs" />
     <Compile Include="UI\Main\Views\LevelView.cs" />
     <Compile Include="UI\Main\Views\MainView.cs" />
+    <Compile Include="Utils\BeatSaverAPI.cs" />
     <Compile Include="Utils\BSMLUtils.cs" />
   </ItemGroup>
   <ItemGroup>

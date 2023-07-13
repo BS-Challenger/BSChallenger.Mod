@@ -1,4 +1,5 @@
-﻿using BSChallenger.UI.AuthorizationFlow;
+﻿using BSChallenger.Providers;
+using BSChallenger.UI.AuthorizationFlow;
 using BSChallenger.UI.AuthorizationFlow.Views;
 using BSChallenger.UI.Main;
 using BSChallenger.UI.Main.Views;
@@ -10,6 +11,7 @@ namespace BSChallenger.Installers
 	{
 		public override void InstallBindings()
 		{
+			Container.Bind<BSChallengeRankingAPIProvider>().FromNewComponentAsViewController().AsSingle().NonLazy();
 			Container.Bind<MainView>().FromNewComponentAsViewController().AsSingle().NonLazy();
 			Container.Bind<LevelView>().FromNewComponentAsViewController().AsSingle().NonLazy();
 			Container.Bind<BSChallengerFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();

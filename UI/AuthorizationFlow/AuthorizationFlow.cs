@@ -18,7 +18,7 @@ namespace BSChallenger.UI.AuthorizationFlow
 			_authView = authViewController;
 			_rankingFlow = rankingFlowCoordinator;
 			MenuButtons.instance.RegisterButton(
-				new MenuButton("BSChallengeRanking", () =>
+				new MenuButton("BSChallenger", () =>
 				{
 					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(this);
 				}

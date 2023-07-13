@@ -5,39 +5,21 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.API;
 using HMUI;
 using IPA.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BSChallenger.UI.Main.Views
 {
 	[HotReload(RelativePathToLayout = @"LevelView.bsml")]
-	[ViewDefinition("BSChallengeRanking.UI.Main.Views.LevelView.bsml")]
+	[ViewDefinition("BSChallenger.UI.Main.Views.LevelView")]
 	internal class LevelView : BSMLAutomaticViewController
 	{
+		[UIComponent("mapsList")] public CustomCellListTableData list;
 		[UIValue("maps")]
-		private List<object> maps = new List<object>()
-		{
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI(),
-			new MapUI()
-		};
+		private List<object> maps = new List<object>();
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -62,11 +44,29 @@ namespace BSChallenger.UI.Main.Views
 				}
 			}
 		}
+
+		internal void SetRanking(Ranking ranking)
+		{
+			StartCoroutine(SetRankingCoroutine(ranking));
+		}
+		private IEnumerator SetRankingCoroutine(Ranking ranking)
+		{
+			yield return new WaitUntil(() => list != null);
+			maps = ranking.levels[0].availableForPass.Select(x => (object)new MapUI(x)).ToList();
+			list.data = maps;
+			list.tableView.ReloadData();
+		}
 	}
 
 	internal class MapUI
 	{
 		private Map map = null;
+		private BeatSaverSharp.Models.Beatmap beatmap;
+
+		internal MapUI(Map map)
+		{
+			map = map;
+		}
 
 		[UIObject("cell")]
 		private GameObject cell;

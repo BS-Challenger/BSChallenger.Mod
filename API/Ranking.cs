@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.API
 {
-	internal class Ranking
+	public class Ranking
 	{
-		internal string name;
-		internal string description;
-		internal string iconURL;
-		internal List<Level> levels;
+		public string name;
+		public string description;
+		public string iconURL;
+		public List<Level> levels;
 	}
 }

@@ -16,7 +16,7 @@ using Zenject;
 namespace BSChallenger.UI.AuthorizationFlow.Views
 {
 	[HotReload(RelativePathToLayout = @"AuthView.bsml")]
-	[ViewDefinition("BSChallengeRanking.UI.AuthorizationFlow.Views.AuthView.bsml")]
+	[ViewDefinition("BSChallenger.UI.AuthorizationFlow.Views.AuthView")]
 	internal class AuthView : BSMLAutomaticViewController
 	{
 		internal enum LoadingType
@@ -89,7 +89,7 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 		IEnumerator TestCoroutine()
 		{
-			yield return new WaitForSeconds(5f);
+			yield return new WaitForSeconds(1f);
 			switch (loadingToUse)
 			{
 				case LoadingType.CheckingForAccount:

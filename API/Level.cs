@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.API
 {
-	internal class Level
+	public class Level
 	{
-		internal readonly int level = 0;
-		internal int totalMaps;
-		internal List<Map> requiredToPass;
+		public readonly int levelNumber = 0;
+		public int mapsReqForPass;
+		public string iconURL;
+		public List<Map> availableForPass;
 	}
 }

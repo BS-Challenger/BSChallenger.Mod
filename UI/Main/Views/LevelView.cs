@@ -9,10 +9,8 @@ using IPA.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace BSChallenger.UI.Main.Views
 {
@@ -40,7 +38,7 @@ namespace BSChallenger.UI.Main.Views
 				ReflectionUtil.SetField(x, "_skew", 0f);
 				x.overrideSprite = null;
 				x.SetImage("#RoundRect10BorderFade");
-				if(x.color == Color.black)
+				if (x.color == Color.black)
 				{
 					x.color = Color.gray;
 				}
@@ -120,7 +118,7 @@ namespace BSChallenger.UI.Main.Views
 				x.color = new Color(0.25f, 0.25f, 1f, 0.4f);
 				bg = x;
 			}
-			if(cell.GetComponent<CellBehaviour>() == null)
+			if (cell.GetComponent<CellBehaviour>() == null)
 			{
 				var behaviour = cell.AddComponent<CellBehaviour>();
 				behaviour.bg = bg;

@@ -96,9 +96,10 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
 			GoTo(LoadingType.CheckingForAccount);
-			if(_refreshTokenStorageProvider.RefreshTokenExists())
+			if (_refreshTokenStorageProvider.RefreshTokenExists())
 			{
 				var token = _refreshTokenStorageProvider.GetRefreshToken();
+				checkingValid = false;
 				_authFlow._apiProvider.AccessToken(token, (x) =>
 				{
 					if(x == "Request Failed")

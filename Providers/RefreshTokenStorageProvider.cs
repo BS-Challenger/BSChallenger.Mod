@@ -11,6 +11,7 @@ namespace BSChallenger.Providers
 		private static string TokenPath => Path.Combine(Application.persistentDataPath, "challengertoken");
 		internal void StoreRefreshToken(string token)
 		{
+			Plugin.Log.Info(token);
 			var bytes = Encoding.UTF8.GetBytes(token);
 			using (var memoryStream = new MemoryStream())
 			{
@@ -19,6 +20,7 @@ namespace BSChallenger.Providers
 					gzipStream.Write(bytes, 0, bytes.Length);
 				}
 				var zippedBytes = memoryStream.ToArray();
+				File.Delete(TokenPath);
 				File.WriteAllBytes(TokenPath, zippedBytes);
 			}
 		}

@@ -5,7 +5,6 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.API;
 using HMUI;
 using IPA.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -53,7 +52,7 @@ namespace BSChallenger.UI.Main.Views
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
-			if(currentRanking != null)
+			if (currentRanking != null)
 			{
 				currentRankingImg.SetImage(currentRanking.iconURL);
 				currentRankingtxt.text = currentRanking.name;
@@ -149,6 +148,8 @@ namespace BSChallenger.UI.Main.Views
 			cover.color0 = color;
 			cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
 			cover.gradient = true;
+			cover.SetField("_skew", 0f);
+			cover.SetAllDirty();
 		}
 
 		public LeveSelectlUI(Level lvl)

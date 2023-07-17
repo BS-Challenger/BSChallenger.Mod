@@ -2,11 +2,9 @@
 using BSChallenger.API.User;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using Zenject;
 
 namespace BSChallenger.Providers
@@ -32,6 +30,7 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Signup", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				Plugin.Log.Info(res);
 				callback(obj);
 			});
 		}
@@ -41,6 +40,7 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Login", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				Plugin.Log.Info(res);
 				callback(obj);
 			});
 		}
@@ -50,6 +50,7 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Identity", new IdentityRequest(token), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResponse>(res);
+				Plugin.Log.Info(res);
 				callback(obj);
 			});
 		}
@@ -58,8 +59,12 @@ namespace BSChallenger.Providers
 		{
 			JsonHttpPostRequest(BASE_URL + "accounts/Access", new AccessTokenRequest(refreshToken), (res) =>
 			{
+				Plugin.Log.Info(res);
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenResponse>(res);
-				refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
+				Plugin.Log.Info(obj.AccessToken);
+
+				if (!string.IsNullOrEmpty(obj.RefreshToken))
+					refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
 				callback(obj.AccessToken);
 			});
 		}

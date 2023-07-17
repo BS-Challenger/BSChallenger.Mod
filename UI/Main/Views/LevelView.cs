@@ -9,6 +9,7 @@ using IPA.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,9 +20,12 @@ namespace BSChallenger.UI.Main.Views
 	[ViewDefinition("BSChallenger.UI.Main.Views.LevelView")]
 	internal class LevelView : BSMLAutomaticViewController
 	{
-		[UIComponent("mapsList")] public CustomCellListTableData list;
+		[UIComponent("mapsList")]
+		private CustomCellListTableData list;
 		[UIValue("maps")]
 		private List<object> maps = new List<object>();
+		[UIComponent("topText")]
+		private TextMeshProUGUI topText;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -51,12 +55,19 @@ namespace BSChallenger.UI.Main.Views
 		{
 			StartCoroutine(SetRankingCoroutine(ranking));
 		}
+
+		internal void SetLevel(Level level)
+		{
+			topText.text = "Level: " + level.levelNumber;
+			maps = level.availableForPass.Select(x => (object)new MapUI(x)).ToList();
+			list.data = maps;
+			list.tableView.ReloadData();
+		}
+
 		private IEnumerator SetRankingCoroutine(Ranking ranking)
 		{
 			yield return new WaitUntil(() => list != null);
-			maps = ranking.levels[0].availableForPass.Select(x => (object)new MapUI(x)).ToList();
-			list.data = maps;
-			list.tableView.ReloadData();
+			SetLevel(ranking.levels[0]);
 		}
 	}
 

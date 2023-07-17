@@ -14,7 +14,7 @@
     <horizontal bg='panel-top' pref-height='16' ignore-layout='true' anchor-pos-y='15' pad='2' pad-left='12' pad-right='12'>
       <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-38' anchor-pos-y='-4' click-event='levelSelectListObj#PageUp' />
       <horizontal pref-width='30'>
-        <custom-list id='levelSelectListObj' show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelSelectList' pad='10' visible-cells='7'>
+        <custom-list id='levelSelectListObj' show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelSelectList' pad='10' visible-cells='7' select-cell="level-selected">
           <horizontal id='cell'>
             <horizontal bg='round-rect-panel' pref-height='10'>
               <horizontal bg='panel-top' pref-height='10' pref-width='15' pad='2' pad-top='2' pad-bottom='1'>

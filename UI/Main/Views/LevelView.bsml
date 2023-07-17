@@ -2,7 +2,7 @@
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 	>
   <horizontal bg='panel-top' anchor-pos-y='35' size-delta-x='-10' pref-height='9' child-expand-width='true' child-expand-height='true'>
-    <text text='Level: 1' font-align='Center' font-size='8'/>
+    <text id='topText' text='Level: 1' font-align='Center' font-size='8'/>
   </horizontal>
 	<horizontal horizontal-fit="PreferredSize" spacing="1.5" pad-top="10">
     <horizontal bg='panel-top' pad='4' pad-right='8'>

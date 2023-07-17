@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.API.User
 {
-	internal class AccessTokenResponse
+	public class IdentityResponse
 	{
-		public string AccessToken { get; set; }
-		public string RefreshToken { get; set; }
+		public int ID { get; set; }
+		public string Username { get; set; }
 	}
 }

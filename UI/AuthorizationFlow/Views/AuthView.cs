@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
+using BSChallenger.Providers;
 using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
@@ -28,6 +29,9 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 		[Inject]
 		private AuthorizationFlow _authFlow;
+
+		[Inject]
+		private RefreshTokenStorageProvider _refreshTokenStorageProvider;
 
 		internal LoadingType loadingToUse = LoadingType.CheckingForAccount;
 
@@ -92,7 +96,40 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
 			GoTo(LoadingType.CheckingForAccount);
-			moveOn = true;
+			if(_refreshTokenStorageProvider.RefreshTokenExists())
+			{
+				var token = _refreshTokenStorageProvider.GetRefreshToken();
+				_authFlow._apiProvider.AccessToken(token, (x) =>
+				{
+					if(x == "Request Failed")
+					{
+						//Refresh Token Expired
+						moveOn = true;
+					}
+					else
+					{
+						_authFlow._apiProvider.Identity(x, (x) =>
+						{
+							if (x.Username == "Identity Request Failed")
+							{
+								//Failed to get access token somehow
+								moveOn = true;
+							}
+							else
+							{
+								_idle.SetActive(false);
+								//Success
+								checkingValid = true;
+								moveOn = true;
+							}
+						});
+					}
+				});
+			}
+			else
+			{
+				moveOn = true;
+			}
 		}
 
 		[UIAction("signup")]
@@ -105,9 +142,10 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 			_authFlow._apiProvider.Signup(username, password, (x) =>
 			{
+				_refreshTokenStorageProvider.StoreRefreshToken(x.RefreshToken);
 				_authFlow._apiProvider.AccessToken(x.RefreshToken, (x) =>
 				{
-					_authFlow._apiProvider.Identity(x, () =>
+					_authFlow._apiProvider.Identity(x, (x) =>
 					{
 						moveOn = true;
 					});
@@ -125,9 +163,10 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 			_authFlow._apiProvider.Login(username, password, (x) =>
 			{
+				_refreshTokenStorageProvider.StoreRefreshToken(x.RefreshToken);
 				_authFlow._apiProvider.AccessToken(x.RefreshToken, (x) =>
 				{
-					_authFlow._apiProvider.Identity(x, () =>
+					_authFlow._apiProvider.Identity(x, (x) =>
 					{
 						moveOn = true;
 					});
@@ -157,6 +196,7 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		}
 
 		internal bool moveOn = false;
+		internal bool checkingValid = false;
 		IEnumerator WaitCoroutine()
 		{
 			moveOn = false;
@@ -164,13 +204,18 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 			switch (loadingToUse)
 			{
 				case LoadingType.CheckingForAccount:
-					_signup.SetActive(true);
-					_login.SetActive(false);
-					_idle.SetActive(false);
+					if (checkingValid)
+					{
+						_authFlow.GoToRankingFlow();
+					}
+					else
+					{
+						_signup.SetActive(true);
+						_login.SetActive(false);
+						_idle.SetActive(false);
+					}
 					break;
 				case LoadingType.LoggingIn:
-					_authFlow.GoToRankingFlow();
-					break;
 				case LoadingType.SigningUp:
 					_authFlow.GoToRankingFlow();
 					break;

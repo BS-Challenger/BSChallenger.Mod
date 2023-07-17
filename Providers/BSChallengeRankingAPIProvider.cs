@@ -7,13 +7,17 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace BSChallenger.Providers
 {
-	public class BSChallengeRankingAPIProvider : MonoBehaviour
+	public class BSChallengeRankingAPIProvider
 	{
 		private HttpClient httpClient = new HttpClient();
 		private const string BASE_URL = "http://localhost:8080/";
+
+		[Inject]
+		private RefreshTokenStorageProvider refreshTokenStorageProvider;
 		public void FetchRankings(Action<List<Ranking>> callback)
 		{
 			JsonHttpGetRequest(BASE_URL + "rankings", (res) =>
@@ -28,7 +32,6 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Signup", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
-				Plugin.Log.Info(res);
 				callback(obj);
 			});
 		}
@@ -38,17 +41,16 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Login", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
-				Plugin.Log.Info(res);
 				callback(obj);
 			});
 		}
 
-		public void Identity(string token, Action callback)
+		public void Identity(string token, Action<IdentityResponse> callback)
 		{
 			JsonHttpPostRequest(BASE_URL + "accounts/Identity", new IdentityRequest(token), (res) =>
 			{
-				Plugin.Log.Info(res);
-				callback();
+				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResponse>(res);
+				callback(obj);
 			});
 		}
 
@@ -57,7 +59,7 @@ namespace BSChallenger.Providers
 			JsonHttpPostRequest(BASE_URL + "accounts/Access", new AccessTokenRequest(refreshToken), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenResponse>(res);
-				Plugin.Log.Info(res);
+				refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
 				callback(obj.AccessToken);
 			});
 		}

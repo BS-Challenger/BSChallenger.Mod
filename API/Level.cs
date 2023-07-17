@@ -13,5 +13,6 @@ namespace BSChallenger.API
 		public int mapsReqForPass;
 		public string iconURL;
 		public List<Map> availableForPass;
+		public string color;
 	}
 }

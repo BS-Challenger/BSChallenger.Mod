@@ -38,5 +38,10 @@ namespace BSChallenger.Providers
 				}
 			}
 		}
+
+		internal bool RefreshTokenExists()
+		{
+			return File.Exists(TokenPath);
+		}
 	}
 }

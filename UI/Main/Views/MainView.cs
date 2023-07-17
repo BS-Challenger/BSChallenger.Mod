@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace BSChallenger.UI.Main.Views
 {
@@ -17,6 +18,9 @@ namespace BSChallenger.UI.Main.Views
 	[ViewDefinition("BSChallenger.UI.Main.Views.MainView")]
 	internal class MainView : BSMLAutomaticViewController
 	{
+		[Inject]
+		private LevelView levelView;
+
 		[UIComponent("levelSelectListObj")]
 		public CustomCellListTableData levelSelectListObj;
 		[UIValue("levelSelectList")]
@@ -29,7 +33,6 @@ namespace BSChallenger.UI.Main.Views
 
 		[UIComponent("currentRankingImg")]
 		internal ImageView currentRankingImg;
-
 		[UIComponent("currentRankingTxt")]
 		internal TextMeshProUGUI currentRankingtxt;
 
@@ -65,6 +68,12 @@ namespace BSChallenger.UI.Main.Views
 			levelSelectListObj.data = levelSelection;
 			levelSelectListObj.tableView.ReloadData();
 		}
+
+		[UIAction("level-selected")]
+		private void LevelSelected(TableView view, LeveSelectlUI cell)
+		{
+			levelView.SetLevel(cell.level);
+		}
 	}
 
 	internal class LevelProgressUI
@@ -88,7 +97,7 @@ namespace BSChallenger.UI.Main.Views
 
 	internal class LeveSelectlUI
 	{
-		private Level level;
+		internal Level level;
 
 		[UIObject("cell")]
 		private GameObject cell;
@@ -99,7 +108,7 @@ namespace BSChallenger.UI.Main.Views
 		private ImageView cover;
 
 		[UIValue("coverURL")]
-		private string coverURL => level.iconURL;
+		private string coverURL => level.iconURL == "Default" ? "BSChallenger.UI.Resources.Pentagon.png" : level.iconURL;
 
 		[UIValue("text")]
 		private string Text => "Lvl " + level.levelNumber;
@@ -134,7 +143,9 @@ namespace BSChallenger.UI.Main.Views
 				behaviour.bg = bg;
 				behaviour.cell = tableCell;
 			}
-			var color = UnityEngine.Random.ColorHSV(0f, 1f, 0.4f, 0.7f, 0.7f, 1f);
+			var colorHex = "#" + level.color;
+			Color color = Color.white;
+			ColorUtility.TryParseHtmlString(colorHex, out color);
 			cover.color0 = color;
 			cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
 			cover.gradient = true;

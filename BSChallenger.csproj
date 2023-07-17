@@ -63,6 +63,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>$(BeatSaberDir)\Libs\System.IO.Compression.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -129,12 +134,18 @@
     <Compile Include="API\User\AccessTokenResponse.cs" />
     <Compile Include="API\User\AccessTokenRequest.cs" />
     <Compile Include="API\User\AuthResponse.cs" />
+    <Compile Include="API\User\IdentityResponse.cs" />
     <Compile Include="API\User\IdentityRequest.cs" />
     <Compile Include="API\User\NamePasswordRequest.cs" />
+    <Compile Include="Contexts\AuthContext.cs" />
+    <Compile Include="Contexts\LevelContext.cs" />
+    <Compile Include="Contexts\RankingContext.cs" />
+    <Compile Include="Contexts\UserContext.cs" />
     <Compile Include="Installers\BSChallengerMenuInstaller.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\BSChallengeRankingAPIProvider.cs" />
+    <Compile Include="Providers\RefreshTokenStorageProvider.cs" />
     <Compile Include="UI\AuthorizationFlow\AuthorizationFlow.cs" />
     <Compile Include="UI\AuthorizationFlow\Views\AuthView.cs" />
     <Compile Include="UI\Main\BSChallengerFlowCoordinator.cs" />
@@ -169,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\Resources\pixel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UI\Resources\Pentagon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

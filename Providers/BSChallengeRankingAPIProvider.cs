@@ -1,4 +1,5 @@
 ﻿using BSChallenger.API;
+using BSChallenger.API.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,26 +19,46 @@ namespace BSChallenger.Providers
 			JsonHttpGetRequest(BASE_URL + "rankings", (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Ranking>>(res);
-				Plugin.Log.Info(obj[0].name);
 				callback(obj);
 			});
 		}
 
-		public void Signup(string name, string pass, Action callback)
+		public void Signup(string name, string pass, Action<AuthResponse> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Signup", new API.User.NamePasswordRequest(name, pass), (res) =>
+			JsonHttpPostRequest(BASE_URL + "accounts/Signup", new NamePasswordRequest(name, pass), (res) =>
+			{
+				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				Plugin.Log.Info(res);
+				callback(obj);
+			});
+		}
+
+		public void Login(string name, string pass, Action<AuthResponse> callback)
+		{
+			JsonHttpPostRequest(BASE_URL + "accounts/Login", new NamePasswordRequest(name, pass), (res) =>
+			{
+				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				Plugin.Log.Info(res);
+				callback(obj);
+			});
+		}
+
+		public void Identity(string token, Action callback)
+		{
+			JsonHttpPostRequest(BASE_URL + "accounts/Identity", new IdentityRequest(token), (res) =>
 			{
 				Plugin.Log.Info(res);
 				callback();
 			});
 		}
 
-		public void Login(string name, string pass, Action callback)
+		public void AccessToken(string refreshToken, Action<string> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Login", new API.User.NamePasswordRequest(name, pass), (res) =>
+			JsonHttpPostRequest(BASE_URL + "accounts/Access", new AccessTokenRequest(refreshToken), (res) =>
 			{
+				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenResponse>(res);
 				Plugin.Log.Info(res);
-				callback();
+				callback(obj.AccessToken);
 			});
 		}
 
@@ -47,7 +68,6 @@ namespace BSChallenger.Providers
 			{
 				var res = await httpClient.GetAsync(url);
 				var stringRes = await res.Content.ReadAsStringAsync();
-				Plugin.Log.Info(stringRes);
 				callback(stringRes);
 			});
 		}

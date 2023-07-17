@@ -4,27 +4,30 @@
   <vertical spacing='1'>
 	  <horizontal id='rankingSelector' horizontal-fit="PreferredSize" spacing="2.5">
       <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-25' anchor-pos-y='-1'/>
-      <img src='https://cdn.assets.beatleader.xyz/PAULclan.png' pref-width='6' pref-height='6'/>
-      <text text='Challenge Community' />
+      <img id='currentRankingImg' src='BSChallenger.UI.Resources.pixel.png' pref-width='6' pref-height='6'/>
+      <text id='currentRankingTxt' text='No Community!' />
       <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='24' anchor-pos-y='-1'/>
 	  </horizontal>
     <horizontal pad-bottom='5' pref-height='13'>
       <clickable-text text='You have 1 issue with your account!' default-color='red' highlight-color='orange' font-align='Center' click-event='OpenLinkModal'/>
     </horizontal>
     <horizontal bg='panel-top' pref-height='16' ignore-layout='true' anchor-pos-y='15' pad='2' pad-left='12' pad-right='12'>
-      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-38' anchor-pos-y='-4'/>
+      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-38' anchor-pos-y='-4' click-event='levelSelectListObj#PageUp' />
       <horizontal pref-width='30'>
-        <custom-list show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelsList' pad='10' visible-cells='7'>
+        <custom-list id='levelSelectListObj' show-scrollbar='true' list-direction='Horizontal' stick-scrolling='true' pref-height='10' pref-width='50' cell-size='10' contents='levelSelectList' pad='10' visible-cells='7'>
           <horizontal id='cell'>
             <horizontal bg='round-rect-panel' pref-height='10'>
-              <horizontal bg='panel-top' pref-height='10' pref-width='15' pad='2'>
-                <img src='https://cdn.betterttv.net/emote/6097c0ef39b5010444d0e517/3x.png' preserve-aspect='true'/>
+              <horizontal bg='panel-top' pref-height='10' pref-width='15' pad='2' pad-top='2' pad-bottom='1'>
+                <img id='coverImg' src='~coverURL'/>
+              </horizontal>
+              <horizontal ignore-layout='true' bg='panel-top-gradient' horizontal-fit='PreferredSize' pad-left='2' pad-right='2' anchor-pos-y='2.75' bg-color='#FFAAAA'>
+                <text text='~text' font-size='2'/>
               </horizontal>
             </horizontal>
           </horizontal>
         </custom-list>
       </horizontal>
-      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='38' anchor-pos-y='-4'/>
+      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='38' anchor-pos-y='-4' click-event='levelSelectListObj#PageDown' />
     </horizontal>
     <horizontal spacing='20' pad-top='10'>
         <vertical spacing ='5' bg='panel-top' pad='5' vertical-fit="PreferredSize">
@@ -44,7 +47,7 @@
           <button text='x' click-event='CloseProgressModal' ignore-layout='true' anchor-pos-x='-12' anchor-pos-y='-4'/>
           <text text='Progress' font-size='12' horizontal-fit="PreferredSize"/>
         </horizontal>
-        <custom-list show-scrollbar='true' stick-scrolling='true' pref-height='60' pref-width='50' contents='levels' pad-bottom='10'>
+        <custom-list id="levelProgListObj" show-scrollbar='true' stick-scrolling='true' pref-height='60' pref-width='50' contents='levelProgList' pad-bottom='10'>
           <horizontal  pref-height='4' spacing='34'>
             <text text='~text'/>
             <img size-delta-y='4' size-delta-x='30' ignore-layout='true' src='BSChallenger.UI.Resources.pixel.png'/>

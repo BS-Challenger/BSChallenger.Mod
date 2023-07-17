@@ -55,6 +55,13 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		[UIObject("passwordObj2")]
 		private GameObject loginPassword;
 
+		[UIValue("username")]
+		public string username { get; set; } = "Username";
+		[UIValue("password")]
+		public string password { get; set; } = "Password";
+
+
+
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
@@ -85,11 +92,75 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
 			GoTo(LoadingType.CheckingForAccount);
+			moveOn = true;
 		}
 
-		IEnumerator TestCoroutine()
+		[UIAction("signup")]
+		private void SignUp()
 		{
-			yield return new WaitForSeconds(1f);
+			_signup.SetActive(false);
+			_idle.SetActive(true);
+			_login.SetActive(false);
+			GoTo(LoadingType.SigningUp);
+
+			_authFlow._apiProvider.Signup(username, password, (x) =>
+			{
+				_authFlow._apiProvider.AccessToken(x.RefreshToken, (x) =>
+				{
+					_authFlow._apiProvider.Identity(x, () =>
+					{
+						moveOn = true;
+					});
+				});
+			});
+		}
+
+		[UIAction("login")]
+		private void Login()
+		{
+			_signup.SetActive(false);
+			_idle.SetActive(true);
+			_login.SetActive(false);
+			GoTo(LoadingType.LoggingIn);
+
+			_authFlow._apiProvider.Login(username, password, (x) =>
+			{
+				_authFlow._apiProvider.AccessToken(x.RefreshToken, (x) =>
+				{
+					_authFlow._apiProvider.Identity(x, () =>
+					{
+						moveOn = true;
+					});
+				});
+			});
+		}
+
+		[UIAction("goToLogin")]
+		private void GoToLogin()
+		{
+			_signup.SetActive(false);
+			_idle.SetActive(false);
+			_login.SetActive(true);
+		}
+
+		private void GoTo(LoadingType loadingToUse)
+		{
+			this.loadingToUse = loadingToUse;
+			StartCoroutine(WaitCoroutine());
+			text.text = loadingToUse switch
+			{
+				LoadingType.CheckingForAccount => "Checking For Account",
+				LoadingType.LoggingIn => "Logging Into Account",
+				LoadingType.SigningUp => "Signing Up For Account",
+				_ => ""
+			};
+		}
+
+		internal bool moveOn = false;
+		IEnumerator WaitCoroutine()
+		{
+			moveOn = false;
+			yield return new WaitUntil(() => moveOn);
 			switch (loadingToUse)
 			{
 				case LoadingType.CheckingForAccount:
@@ -104,45 +175,6 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 					_authFlow.GoToRankingFlow();
 					break;
 			}
-		}
-
-		[UIAction("signup")]
-		private void SignUp()
-		{
-			_signup.SetActive(false);
-			_idle.SetActive(true);
-			_login.SetActive(false);
-			GoTo(LoadingType.SigningUp);
-		}
-
-		[UIAction("login")]
-		private void Login()
-		{
-			_signup.SetActive(false);
-			_idle.SetActive(true);
-			_login.SetActive(false);
-			GoTo(LoadingType.LoggingIn);
-		}
-
-		[UIAction("goToLogin")]
-		private void GoToLogin()
-		{
-			_signup.SetActive(false);
-			_idle.SetActive(false);
-			_login.SetActive(true);
-		}
-
-		private void GoTo(LoadingType loadingToUse)
-		{
-			this.loadingToUse = loadingToUse;
-			StartCoroutine(TestCoroutine());
-			text.text = loadingToUse switch
-			{
-				LoadingType.CheckingForAccount => "Checking For Account",
-				LoadingType.LoggingIn => "Logging Into Account",
-				LoadingType.SigningUp => "Signing Up For Account",
-				_ => ""
-			};
 		}
 	}
 }

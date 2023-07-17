@@ -7,16 +7,16 @@
   </vertical>
   <vertical id='signupScreen' bg='panel-top' vertical-fit='PreferredSize' pref-width='70' pref-height='75' pad='3' pad-left='8' pad-right='8' child-align='MiddleCenter'>
     <text text='Sign Up...' ignore-layout='true' font-size='10' font-align='Center'/>
-    <string-setting id='usernameObj' text='Username' />
-    <string-setting id='passwordObj' text='Password'/>
+    <string-setting id='usernameObj' text='Username' value='username' apply-on-change="true" />
+    <string-setting id='passwordObj' text='Password' value='password' apply-on-change="true" />
     <button text='Sign Up' font-size='10' pref-height='13' pref-width='45' on-click='signup'/>
     <text text='... Or login to an existing account' font-size='5' font-align='Center'/>
     <button text='Log In' font-size='5' pref-height='10' pref-width='40' on-click='goToLogin'/>
   </vertical>
   <vertical id='loginScreen' bg='panel-top' vertical-fit='PreferredSize' pref-width='70' pref-height='75' pad='3' pad-left='8' pad-right='8' child-align='MiddleCenter'>
     <text text='Log In...' ignore-layout='true' font-size='10' font-align='Center'/>
-    <string-setting id='usernameObj2' text='Username' />
-    <string-setting id='passwordObj2' text='Password' />
+    <string-setting id='usernameObj2' text='Username' value='username' apply-on-change="true" />
+    <string-setting id='passwordObj2' text='Password' value='password' apply-on-change="true" />
     <button text='Log In' font-size='10' pref-height='13' pref-width='45' on-click='login'/>
   </vertical>
 </bg>

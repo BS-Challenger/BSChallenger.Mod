@@ -126,6 +126,10 @@
     <Compile Include="API\Level.cs" />
     <Compile Include="API\Map.cs" />
     <Compile Include="API\Ranking.cs" />
+    <Compile Include="API\User\AccessTokenResponse.cs" />
+    <Compile Include="API\User\AccessTokenRequest.cs" />
+    <Compile Include="API\User\AuthResponse.cs" />
+    <Compile Include="API\User\IdentityRequest.cs" />
     <Compile Include="API\User\NamePasswordRequest.cs" />
     <Compile Include="Installers\BSChallengerMenuInstaller.cs" />
     <Compile Include="Plugin.cs" />

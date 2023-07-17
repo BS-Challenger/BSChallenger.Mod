@@ -8,6 +8,7 @@ using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace BSChallenger.UI.Main.Views
@@ -16,11 +17,23 @@ namespace BSChallenger.UI.Main.Views
 	[ViewDefinition("BSChallenger.UI.Main.Views.MainView")]
 	internal class MainView : BSMLAutomaticViewController
 	{
-		[UIComponent("levelSelectList")]
-		internal List<object> levels = new List<object>();
+		[UIComponent("levelSelectListObj")]
+		public CustomCellListTableData levelSelectListObj;
+		[UIValue("levelSelectList")]
+		internal List<object> levelSelection = new List<object>();
 
-		[UIComponent("levelProgList")]
-		internal List<object> levelsList = new List<object>();
+		[UIComponent("levelProgListObj")]
+		public CustomCellListTableData levelProgListObj;
+		[UIValue("levelProgList")]
+		internal List<object> levelsProgress = new List<object>();
+
+		[UIComponent("currentRankingImg")]
+		internal ImageView currentRankingImg;
+
+		[UIComponent("currentRankingTxt")]
+		internal TextMeshProUGUI currentRankingtxt;
+
+		internal Ranking currentRanking;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -37,21 +50,29 @@ namespace BSChallenger.UI.Main.Views
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
+			if(currentRanking != null)
+			{
+				currentRankingImg.SetImage(currentRanking.iconURL);
+				currentRankingtxt.text = currentRanking.name;
+			}
 		}
 
 		internal void SetRanking(Ranking ranking)
 		{
+			currentRanking = ranking;
 			var levels = ranking.levels.OrderBy(x => x.levelNumber);
-
+			levelSelection = levels.Select(x => (object)new LeveSelectlUI(x)).ToList();
+			levelSelectListObj.data = levelSelection;
+			levelSelectListObj.tableView.ReloadData();
 		}
 	}
 
 	internal class LevelProgressUI
 	{
 		[UIValue("text")]
-		private string text => "Lvl: " + lvl;
+		private string Text => "Lvl: " + lvl;
 		[UIValue("count")]
-		private string countText => count + "/" + totalCount;
+		private string CountText => count + "/" + totalCount;
 
 		private int lvl;
 		private int totalCount;
@@ -71,16 +92,24 @@ namespace BSChallenger.UI.Main.Views
 
 		[UIObject("cell")]
 		private GameObject cell;
-
 		private CustomCellTableCell tableCell;
-
 		private ImageView bg;
+
+		[UIComponent("coverImg")]
+		private ImageView cover;
+
+		[UIValue("coverURL")]
+		private string coverURL => level.iconURL;
+
+		[UIValue("text")]
+		private string Text => "Lvl " + level.levelNumber;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
 			tableCell = cell.GetComponentInParent<CustomCellTableCell>();
-			foreach (var x in cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>()))
+			var images = cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>());
+			foreach (var x in images)
 			{
 				if (!x || x.color0 != Color.white || x.sprite.name != "RoundRect10")
 					continue;
@@ -91,12 +120,24 @@ namespace BSChallenger.UI.Main.Views
 				x.color = new Color(0.25f, 0.25f, 1f, 0.4f);
 				bg = x;
 			}
+			foreach (var x in images)
+			{
+				if ((x != null) && x.sprite.name == "RoundRect10")
+				{
+					x.color0 = new Color(0.5f, 0.25f, 1f);
+					x.color1 = new Color(0.23f, 0f, 0.58f);
+				}
+			}
 			if (cell.GetComponent<CellBehaviour>() == null)
 			{
 				var behaviour = cell.AddComponent<CellBehaviour>();
 				behaviour.bg = bg;
 				behaviour.cell = tableCell;
 			}
+			var color = UnityEngine.Random.ColorHSV(0f, 1f, 0.4f, 0.7f, 0.7f, 1f);
+			cover.color0 = color;
+			cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
+			cover.gradient = true;
 		}
 
 		public LeveSelectlUI(Level lvl)

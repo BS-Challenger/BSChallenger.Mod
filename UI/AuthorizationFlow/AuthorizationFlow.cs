@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.MenuButtons;
+using BSChallenger.Providers;
 using BSChallenger.UI.AuthorizationFlow.Views;
 using BSChallenger.UI.Main;
 using HMUI;
@@ -11,12 +12,14 @@ namespace BSChallenger.UI.AuthorizationFlow
 	{
 		private BSChallengerFlowCoordinator _rankingFlow;
 		private AuthView _authView;
+		internal BSChallengeRankingAPIProvider _apiProvider;
 
 		[Inject]
-		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator)
+		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator, BSChallengeRankingAPIProvider apiProvider)
 		{
 			_authView = authViewController;
 			_rankingFlow = rankingFlowCoordinator;
+			_apiProvider = apiProvider;
 			MenuButtons.instance.RegisterButton(
 				new MenuButton("BSChallenger", () =>
 				{

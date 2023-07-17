@@ -3,11 +3,13 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.API;
+using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -65,7 +67,7 @@ namespace BSChallenger.UI.Main.Views
 
 		internal MapUI(Map map)
 		{
-			map = map;
+			this.map = map;
 		}
 
 		[UIObject("cell")]
@@ -75,9 +77,26 @@ namespace BSChallenger.UI.Main.Views
 
 		private ImageView bg;
 
+		[UIComponent("Cover")]
+		private ImageView cover;
+
+		[UIComponent("MapName")]
+		private TextMeshProUGUI MapName;
+
+		[UIComponent("MapperName")]
+		private TextMeshProUGUI MapperName;
+
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
+			BeatSaverAPI.FetchBeatmap(map.hash, (x) =>
+			{
+				beatmap = x;
+				Plugin.Log.Info(beatmap.LatestVersion.CoverURL);
+				cover.SetImage(beatmap.LatestVersion.CoverURL);
+				MapName.text = x.Name;
+				MapperName.text = "[" + "<size=80%><color=#ff69b4>" + x.Uploader.Name + "</color></size>]";
+			});
 			tableCell = cell.GetComponentInParent<CustomCellTableCell>();
 			foreach (var x in cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>()))
 			{

@@ -3,10 +3,10 @@
 	>
   <vertical spacing='1'>
 	  <horizontal id='rankingSelector' horizontal-fit="PreferredSize" spacing="2.5">
-      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-25' anchor-pos-y='-1'/>
+      <page-button direction='Left' ignore-layout='true' pref-width='7' anchor-pos-x='-25' anchor-pos-y='-1' on-click='LeftRanking'/>
       <img id='currentRankingImg' src='BSChallenger.UI.Resources.pixel.png' pref-width='6' pref-height='6'/>
       <text id='currentRankingTxt' text='No Community!' />
-      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='24' anchor-pos-y='-1'/>
+      <page-button direction='Right' ignore-layout='true' pref-width='7' anchor-pos-x='24' anchor-pos-y='-1' on-click='RightRanking'/>
 	  </horizontal>
     <horizontal pad-bottom='5' pref-height='13'>
       <clickable-text text='You have 1 issue with your account!' default-color='red' highlight-color='orange' font-align='Center' click-event='OpenLinkModal'/>

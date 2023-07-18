@@ -6,9 +6,7 @@ using BSChallenger.Providers;
 using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -102,7 +100,7 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 				checkingValid = false;
 				_authFlow._apiProvider.AccessToken(token, (x) =>
 				{
-					if(x == "Request Failed")
+					if (x == "Request Failed")
 					{
 						//Refresh Token Expired
 						moveOn = true;

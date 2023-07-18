@@ -18,7 +18,9 @@ namespace BSChallenger.UI.Main.Views
 	internal class MainView : BSMLAutomaticViewController
 	{
 		[Inject]
-		private LevelView levelView;
+		private LevelView _levelView;
+		[Inject]
+		private BSChallengerFlowCoordinator _flow;
 
 		[UIComponent("levelSelectListObj")]
 		public CustomCellListTableData levelSelectListObj;
@@ -36,6 +38,7 @@ namespace BSChallenger.UI.Main.Views
 		internal TextMeshProUGUI currentRankingtxt;
 
 		internal Ranking currentRanking;
+		internal int rankingIdx = 0;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -52,11 +55,6 @@ namespace BSChallenger.UI.Main.Views
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
-			if (currentRanking != null)
-			{
-				currentRankingImg.SetImage(currentRanking.iconURL);
-				currentRankingtxt.text = currentRanking.name;
-			}
 		}
 
 		internal void SetRanking(Ranking ranking)
@@ -66,12 +64,32 @@ namespace BSChallenger.UI.Main.Views
 			levelSelection = levels.Select(x => (object)new LeveSelectlUI(x)).ToList();
 			levelSelectListObj.data = levelSelection;
 			levelSelectListObj.tableView.ReloadData();
+			levelSelectListObj.tableView.SelectCellWithIdx(0);
+			if (currentRanking != null)
+			{
+				currentRankingImg.SetImage(currentRanking.iconURL);
+				currentRankingtxt.text = currentRanking.name;
+			}
 		}
 
 		[UIAction("level-selected")]
 		private void LevelSelected(TableView view, LeveSelectlUI cell)
 		{
-			levelView.SetLevel(cell.level);
+			_levelView.SetLevel(cell.level);
+		}
+
+		[UIAction("LeftRanking")]
+		private void LeftRanking()
+		{
+			rankingIdx = Mathf.Max(rankingIdx - 1, 0);
+			_flow.DistributeRanking(_flow.allRankings[rankingIdx]);
+		}
+
+		[UIAction("RightRanking")]
+		private void RightRanking()
+		{
+			rankingIdx = Mathf.Min(rankingIdx + 1, _flow.allRankings.Count - 1);
+			_flow.DistributeRanking(_flow.allRankings[rankingIdx]);
 		}
 	}
 
@@ -143,13 +161,12 @@ namespace BSChallenger.UI.Main.Views
 				behaviour.cell = tableCell;
 			}
 			var colorHex = "#" + level.color;
-			Color color = Color.white;
-			ColorUtility.TryParseHtmlString(colorHex, out color);
-			cover.color0 = color;
-			cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
-			cover.gradient = true;
-			cover.SetField("_skew", 0f);
-			cover.SetAllDirty();
+			if (ColorUtility.TryParseHtmlString(colorHex, out Color color))
+			{
+				cover.color0 = color;
+				cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
+				cover.gradient = true;
+			}
 		}
 
 		public LeveSelectlUI(Level lvl)

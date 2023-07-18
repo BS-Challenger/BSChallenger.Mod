@@ -41,11 +41,6 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BeatSaverSharp, Version=3.4.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <Private>False</Private>
-      <HintPath>$(BeatSaberDir)\Libs\BeatSaverSharp.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="BSML, Version=1.6.10.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
@@ -59,6 +54,11 @@
     <Reference Include="SiraUtil, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="SongDetailsCache, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>$(BeatSaberDir)\Libs\SongDetailsCache.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
@@ -152,7 +152,7 @@
     <Compile Include="UI\Main\CellBehaviour.cs" />
     <Compile Include="UI\Main\Views\LevelView.cs" />
     <Compile Include="UI\Main\Views\MainView.cs" />
-    <Compile Include="Utils\BeatSaverAPI.cs" />
+    <Compile Include="Utils\SongDetailsUtils.cs" />
     <Compile Include="Utils\BSMLUtils.cs" />
   </ItemGroup>
   <ItemGroup>

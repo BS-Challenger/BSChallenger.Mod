@@ -59,9 +59,7 @@ namespace BSChallenger.Providers
 		{
 			JsonHttpPostRequest(BASE_URL + "accounts/Access", new AccessTokenRequest(refreshToken), (res) =>
 			{
-				Plugin.Log.Info(res);
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenResponse>(res);
-				Plugin.Log.Info(obj.AccessToken);
 
 				if (!string.IsNullOrEmpty(obj.RefreshToken))
 					refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);

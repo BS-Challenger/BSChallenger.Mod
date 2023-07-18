@@ -6,6 +6,7 @@ using BSChallenger.API;
 using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
+using SongDetailsCache.Structs;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace BSChallenger.UI.Main.Views
 			maps = level.availableForPass.Select(x => (object)new MapUI(x)).ToList();
 			list.data = maps;
 			list.tableView.ReloadData();
+			list.tableView.SelectCellWithIdx(0);
 		}
 
 		private IEnumerator SetRankingCoroutine(Ranking ranking)
@@ -72,7 +74,7 @@ namespace BSChallenger.UI.Main.Views
 	internal class MapUI
 	{
 		private Map map = null;
-		private BeatSaverSharp.Models.Beatmap beatmap;
+		private Song beatmap;
 
 		internal MapUI(Map map)
 		{
@@ -98,13 +100,12 @@ namespace BSChallenger.UI.Main.Views
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
-			BeatSaverAPI.FetchBeatmap(map.hash, (x) =>
+			SongDetailsUtils.FetchBeatmap(map.hash, (x) =>
 			{
 				beatmap = x;
-				Plugin.Log.Info(beatmap.LatestVersion.CoverURL);
-				cover.SetImage(beatmap.LatestVersion.CoverURL);
-				MapName.text = x.Name;
-				MapperName.text = "[" + "<size=80%><color=#ff69b4>" + x.Uploader.Name + "</color></size>]";
+				cover.SetImage(beatmap.coverURL);
+				MapName.text = x.songName;
+				MapperName.text = "[" + "<size=80%><color=#ff69b4>" + x.uploaderName + "</color></size>]";
 			});
 			tableCell = cell.GetComponentInParent<CustomCellTableCell>();
 			foreach (var x in cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>()))

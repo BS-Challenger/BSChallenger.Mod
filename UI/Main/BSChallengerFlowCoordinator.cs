@@ -3,6 +3,7 @@ using BSChallenger.API;
 using BSChallenger.Providers;
 using BSChallenger.UI.Main.Views;
 using HMUI;
+using System.Collections.Generic;
 using Zenject;
 
 namespace BSChallenger.UI.Main
@@ -13,6 +14,7 @@ namespace BSChallenger.UI.Main
 		private LevelView _levelView;
 		private BSChallengeRankingAPIProvider _apiProvider;
 		internal Ranking currentRanking;
+		internal List<Ranking> allRankings;
 
 		[Inject]
 		internal void Construct(MainView mainViewController, LevelView levelViewController, BSChallengeRankingAPIProvider api)
@@ -26,6 +28,7 @@ namespace BSChallenger.UI.Main
 		{
 			_apiProvider.FetchRankings((results) =>
 			{
+				allRankings = results;
 				currentRanking = results[0];
 				DistributeRanking(currentRanking);
 			});
@@ -37,10 +40,12 @@ namespace BSChallenger.UI.Main
 			}
 		}
 
-		private void DistributeRanking(Ranking ranking)
+		internal void DistributeRanking(Ranking ranking)
 		{
-			_levelView.SetRanking(ranking);
-			_mainView.SetRanking(ranking);
+			HMMainThreadDispatcher.instance.Enqueue(() => {
+				_levelView.SetRanking(ranking);
+				_mainView.SetRanking(ranking);
+			});
 		}
 
 		protected override void BackButtonWasPressed(ViewController topViewController)

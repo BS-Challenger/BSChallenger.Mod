@@ -26,36 +26,36 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		}
 
 		[Inject]
-		private AuthorizationFlow _authFlow;
+		private AuthorizationFlow _authFlow = null;
 
 		[Inject]
-		private RefreshTokenStorageProvider _refreshTokenStorageProvider;
+		private RefreshTokenStorageProvider _refreshTokenStorageProvider = null;
 
 		internal LoadingType loadingToUse = LoadingType.CheckingForAccount;
 
 		[UIObject("loginScreen")]
-		private GameObject _login;
+		private GameObject _login = null;
 
 		[UIObject("signupScreen")]
-		private GameObject _signup;
+		private GameObject _signup = null;
 
 		[UIObject("idleScreen")]
-		private GameObject _idle;
+		private GameObject _idle = null;
 
 		[UIComponent("text")]
-		private TextMeshProUGUI text;
+		private TextMeshProUGUI text = null;
 
 		[UIObject("usernameObj")]
-		private GameObject signupUsername;
+		private GameObject signupUsername = null;
 
 		[UIObject("passwordObj")]
-		private GameObject signupPassword;
+		private GameObject signupPassword = null;
 
 		[UIObject("usernameObj2")]
-		private GameObject loginUsername;
+		private GameObject loginUsername = null;
 
 		[UIObject("passwordObj2")]
-		private GameObject loginPassword;
+		private GameObject loginPassword = null;
 
 		[UIValue("username")]
 		public string username { get; set; } = "Username";
@@ -92,21 +92,25 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
 		{
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-
+			moveOn = false;
 			GoTo(LoadingType.CheckingForAccount);
 			if (_refreshTokenStorageProvider.RefreshTokenExists())
 			{
 				var token = _refreshTokenStorageProvider.GetRefreshToken();
 				checkingValid = false;
+				Plugin.Log.Info("y");
 				_authFlow._apiProvider.AccessToken(token, (x) =>
 				{
+					Plugin.Log.Info("x");
 					if (x == "Request Failed")
 					{
 						//Refresh Token Expired
 						moveOn = true;
+						Plugin.Log.Info("x3");
 					}
 					else
 					{
+						Plugin.Log.Info("x4");
 						_authFlow._apiProvider.Identity(x, (x) =>
 						{
 							if (x.Username == "Identity Request Failed")
@@ -162,6 +166,7 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 
 			_authFlow._apiProvider.Login(username, password, (x) =>
 			{
+
 				_refreshTokenStorageProvider.StoreRefreshToken(x.RefreshToken);
 				_authFlow._apiProvider.AccessToken(x.RefreshToken, (x) =>
 				{

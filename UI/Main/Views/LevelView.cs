@@ -20,11 +20,11 @@ namespace BSChallenger.UI.Main.Views
 	internal class LevelView : BSMLAutomaticViewController
 	{
 		[UIComponent("mapsList")]
-		private CustomCellListTableData list;
+		private CustomCellListTableData list = null;
 		[UIValue("maps")]
 		private List<object> maps = new List<object>();
 		[UIComponent("topText")]
-		private TextMeshProUGUI topText;
+		private TextMeshProUGUI topText = null;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -73,8 +73,7 @@ namespace BSChallenger.UI.Main.Views
 
 	internal class MapUI
 	{
-		private Map map = null;
-		private Song beatmap;
+		private readonly Map map = null;
 
 		internal MapUI(Map map)
 		{
@@ -82,38 +81,35 @@ namespace BSChallenger.UI.Main.Views
 		}
 
 		[UIObject("cell")]
-		private GameObject cell;
-
-		private CustomCellTableCell tableCell;
+		private GameObject cell = null;
 
 		private ImageView bg;
 
 		[UIComponent("Cover")]
-		private ImageView cover;
+		private ImageView cover = null;
 
 		[UIComponent("MapName")]
-		private TextMeshProUGUI MapName;
+		private TextMeshProUGUI MapName = null;
 
 		[UIComponent("MapperName")]
-		private TextMeshProUGUI MapperName;
+		private TextMeshProUGUI MapperName = null;
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
 			SongDetailsUtils.FetchBeatmap(map.hash, (x) =>
 			{
-				beatmap = x;
-				cover.SetImage(beatmap.coverURL);
+				cover.SetImage(x.coverURL);
 				MapName.text = x.songName;
-				MapperName.text = "[" + "<size=80%><color=#ff69b4>" + x.uploaderName + "</color></size>]";
+				MapperName.text = "[<size=80%><color=#ff69b4>" + x.uploaderName + "</color></size>]";
 			});
-			tableCell = cell.GetComponentInParent<CustomCellTableCell>();
+			CustomCellTableCell tableCell = cell.GetComponentInParent<CustomCellTableCell>();
 			foreach (var x in cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>()))
 			{
 				if (!x || x.color0 != Color.white || x.sprite.name != "RoundRect10")
 					continue;
 
-				ReflectionUtil.SetField(x, "_skew", 0f);
+				x.SetField("_skew", 0f);
 				x.overrideSprite = null;
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(0.25f, 0.25f, 1f, 0.4f);

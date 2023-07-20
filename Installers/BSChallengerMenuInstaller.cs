@@ -12,7 +12,7 @@ namespace BSChallenger.Installers
 		public override void InstallBindings()
 		{
 			Container.Bind<RefreshTokenStorageProvider>().AsSingle().NonLazy();
-			Container.Bind<BSChallengeRankingAPIProvider>().AsSingle().NonLazy();
+			Container.Bind<ChallengeRankingApiProvider>().AsSingle().NonLazy();
 			Container.Bind<LevelView>().FromNewComponentAsViewController().AsSingle().NonLazy();
 			Container.Bind<MainView>().FromNewComponentAsViewController().AsSingle().NonLazy();
 			Container.Bind<BSChallengerFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();

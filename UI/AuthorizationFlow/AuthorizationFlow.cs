@@ -12,10 +12,10 @@ namespace BSChallenger.UI.AuthorizationFlow
 	{
 		private BSChallengerFlowCoordinator _rankingFlow;
 		private AuthView _authView;
-		internal BSChallengeRankingAPIProvider _apiProvider;
+		internal ChallengeRankingApiProvider _apiProvider;
 
 		[Inject]
-		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator, BSChallengeRankingAPIProvider apiProvider)
+		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator, ChallengeRankingApiProvider apiProvider)
 		{
 			_authView = authViewController;
 			_rankingFlow = rankingFlowCoordinator;

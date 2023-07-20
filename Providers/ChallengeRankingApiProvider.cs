@@ -9,13 +9,13 @@ using Zenject;
 
 namespace BSChallenger.Providers
 {
-	public class BSChallengeRankingAPIProvider
+	public class ChallengeRankingApiProvider
 	{
-		private HttpClient httpClient = new HttpClient();
-		private const string BASE_URL = "http://localhost:8080/";
+		private readonly HttpClient httpClient = new HttpClient();
+		private const string BASE_URL = "http://localhost:8081/";
 
 		[Inject]
-		private RefreshTokenStorageProvider refreshTokenStorageProvider;
+		private RefreshTokenStorageProvider refreshTokenStorageProvider = null;
 		public void FetchRankings(Action<List<Ranking>> callback)
 		{
 			JsonHttpGetRequest(BASE_URL + "rankings", (res) =>
@@ -27,9 +27,11 @@ namespace BSChallenger.Providers
 
 		public void Signup(string name, string pass, Action<AuthResponse> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Signup", new NamePasswordRequest(name, pass), (res) =>
+			JsonHttpPostRequest(BASE_URL + "Authenticate/Signup", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				if (!string.IsNullOrEmpty(obj.RefreshToken))
+					refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
 				Plugin.Log.Info(res);
 				callback(obj);
 			});
@@ -37,9 +39,11 @@ namespace BSChallenger.Providers
 
 		public void Login(string name, string pass, Action<AuthResponse> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Login", new NamePasswordRequest(name, pass), (res) =>
+			JsonHttpPostRequest(BASE_URL + "Authenticate/Login", new NamePasswordRequest(name, pass), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(res);
+				if (!string.IsNullOrEmpty(obj.RefreshToken))
+					refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
 				Plugin.Log.Info(res);
 				callback(obj);
 			});
@@ -47,7 +51,7 @@ namespace BSChallenger.Providers
 
 		public void Identity(string token, Action<IdentityResponse> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Identity", new IdentityRequest(token), (res) =>
+			JsonHttpPostRequest(BASE_URL + "Authenticate/Identity", new IdentityRequest(token), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResponse>(res);
 				Plugin.Log.Info(res);
@@ -57,13 +61,24 @@ namespace BSChallenger.Providers
 
 		public void AccessToken(string refreshToken, Action<string> callback)
 		{
-			JsonHttpPostRequest(BASE_URL + "accounts/Access", new AccessTokenRequest(refreshToken), (res) =>
+			JsonHttpPostRequest(BASE_URL + "Authenticate/AccessToken", new AccessTokenRequest(refreshToken), (res) =>
 			{
 				var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<AccessTokenResponse>(res);
+				Plugin.Log.Info("Balls:" + obj.NewRefreshToken + ":");
 
-				if (!string.IsNullOrEmpty(obj.RefreshToken))
-					refreshTokenStorageProvider.StoreRefreshToken(obj.RefreshToken);
+				if (!string.IsNullOrEmpty(obj.NewRefreshToken))
+				{
+					refreshTokenStorageProvider.StoreRefreshToken(obj.NewRefreshToken);
+				}
 				callback(obj.AccessToken);
+			});
+		}
+
+		public void Authenticate(string accessToken, Action<string> callback)
+		{
+			JsonHttpPostRequest(BASE_URL + "Authenticate/GetBLToken", new IdentityRequest(accessToken), (res) =>
+			{
+				Plugin.Log.Info(res);
 			});
 		}
 

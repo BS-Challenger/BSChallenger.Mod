@@ -70,7 +70,7 @@
           <text text=" account to your BSChallenger Account" word-wrapping='true' rich-text='true'/>
         </horizontal>
         <text text=' - This will require you to take your headset off in order to login to Beatleader and authorize' word-wrapping='true'/>
-        <button text='Open Link' font-size='7' pad-top='10'/>
+        <button text='Open Link' font-size='7' pad-top='10' on-click='OpenBeatleader'/>
       </vertical>
     </modal>
   </vertical>

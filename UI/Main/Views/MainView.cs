@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.API;
+using BSChallenger.Providers;
 using HMUI;
 using IPA.Utilities;
 using System.Collections.Generic;
@@ -18,24 +19,26 @@ namespace BSChallenger.UI.Main.Views
 	internal class MainView : BSMLAutomaticViewController
 	{
 		[Inject]
-		private LevelView _levelView;
+		private LevelView _levelView = null;
 		[Inject]
-		private BSChallengerFlowCoordinator _flow;
+		private BSChallengerFlowCoordinator _flow = null;
+		[Inject]
+		private RefreshTokenStorageProvider _refreshTokenStorageProvider = null;
 
 		[UIComponent("levelSelectListObj")]
-		public CustomCellListTableData levelSelectListObj;
+		public CustomCellListTableData levelSelectListObj = null;
 		[UIValue("levelSelectList")]
 		internal List<object> levelSelection = new List<object>();
 
 		[UIComponent("levelProgListObj")]
-		public CustomCellListTableData levelProgListObj;
+		public CustomCellListTableData levelProgListObj = null;
 		[UIValue("levelProgList")]
 		internal List<object> levelsProgress = new List<object>();
 
 		[UIComponent("currentRankingImg")]
-		internal ImageView currentRankingImg;
+		internal ImageView currentRankingImg = null;
 		[UIComponent("currentRankingTxt")]
-		internal TextMeshProUGUI currentRankingtxt;
+		internal TextMeshProUGUI currentRankingtxt = null;
 
 		internal Ranking currentRanking;
 		internal int rankingIdx = 0;
@@ -91,6 +94,18 @@ namespace BSChallenger.UI.Main.Views
 			rankingIdx = Mathf.Min(rankingIdx + 1, _flow.allRankings.Count - 1);
 			_flow.DistributeRanking(_flow.allRankings[rankingIdx]);
 		}
+
+		[UIAction("OpenBeatleader")]
+		private void BeatLeader()
+		{
+			string token = _refreshTokenStorageProvider.GetRefreshToken();
+			_flow._apiProvider.AccessToken(token, (x) =>
+			{
+				_flow._apiProvider.Authenticate(x, (x) => {
+					Plugin.Log.Info(x);
+				});
+			});
+		}
 	}
 
 	internal class LevelProgressUI
@@ -98,10 +113,10 @@ namespace BSChallenger.UI.Main.Views
 		[UIValue("text")]
 		private string Text => "Lvl: " + lvl;
 		[UIValue("count")]
-		private string CountText => count + "/" + totalCount;
+		private string CountText => Count + "/" + totalCount;
 
-		private int lvl;
-		private int totalCount;
+		private readonly int lvl;
+		private readonly int totalCount;
 
 		public LevelProgressUI(int lvl, int totalCount)
 		{
@@ -109,7 +124,7 @@ namespace BSChallenger.UI.Main.Views
 			this.totalCount = totalCount;
 		}
 
-		private int count => new System.Random().Next(0, totalCount);
+		private int Count => new System.Random().Next(0, totalCount);
 	}
 
 	internal class LeveSelectlUI
@@ -117,12 +132,11 @@ namespace BSChallenger.UI.Main.Views
 		internal Level level;
 
 		[UIObject("cell")]
-		private GameObject cell;
-		private CustomCellTableCell tableCell;
+		private GameObject cell = null;
 		private ImageView bg;
 
 		[UIComponent("coverImg")]
-		private ImageView cover;
+		private ImageView cover = null;
 
 		[UIValue("coverURL")]
 		private string coverURL => level.iconURL == "Default" ? "BSChallenger.UI.Resources.Pentagon.png" : level.iconURL;
@@ -130,10 +144,15 @@ namespace BSChallenger.UI.Main.Views
 		[UIValue("text")]
 		private string Text => "Lvl " + level.levelNumber;
 
+		public LeveSelectlUI(Level lvl)
+		{
+			level = lvl;
+		}
+
 		[UIAction("#post-parse")]
 		internal void PostParse()
 		{
-			tableCell = cell.GetComponentInParent<CustomCellTableCell>();
+			CustomCellTableCell tableCell = cell.GetComponentInParent<CustomCellTableCell>();
 			var images = cell.GetComponentsInChildren<Backgroundable>().Select(x => x.GetComponent<ImageView>());
 			foreach (var x in images)
 			{
@@ -167,11 +186,6 @@ namespace BSChallenger.UI.Main.Views
 				cover.color1 = (color * 0.6f).ColorWithAlpha(1f);
 				cover.gradient = true;
 			}
-		}
-
-		public LeveSelectlUI(Level lvl)
-		{
-			level = lvl;
 		}
 	}
 }

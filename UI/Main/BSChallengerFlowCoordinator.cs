@@ -12,12 +12,12 @@ namespace BSChallenger.UI.Main
 	{
 		private MainView _mainView;
 		private LevelView _levelView;
-		private BSChallengeRankingAPIProvider _apiProvider;
+		internal ChallengeRankingApiProvider _apiProvider;
 		internal Ranking currentRanking;
 		internal List<Ranking> allRankings;
 
 		[Inject]
-		internal void Construct(MainView mainViewController, LevelView levelViewController, BSChallengeRankingAPIProvider api)
+		internal void Construct(MainView mainViewController, LevelView levelViewController, ChallengeRankingApiProvider api)
 		{
 			_mainView = mainViewController;
 			_levelView = levelViewController;

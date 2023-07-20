@@ -22,6 +22,7 @@ namespace BSChallenger.Providers
 				var zippedBytes = memoryStream.ToArray();
 				File.Delete(TokenPath);
 				File.WriteAllBytes(TokenPath, zippedBytes);
+				Plugin.Log.Info("Storing: " + token);
 			}
 		}
 
@@ -36,6 +37,7 @@ namespace BSChallenger.Providers
 					{
 						decompressStream.CopyTo(outputStream);
 					}
+					Plugin.Log.Info("Fetched: " + Encoding.UTF8.GetString(outputStream.ToArray()));
 					return Encoding.UTF8.GetString(outputStream.ToArray());
 				}
 			}

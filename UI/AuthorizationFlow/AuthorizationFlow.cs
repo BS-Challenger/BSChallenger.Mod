@@ -21,9 +21,9 @@ namespace BSChallenger.UI.AuthorizationFlow
 			_rankingFlow = rankingFlowCoordinator;
 			_apiProvider = apiProvider;
 			MenuButtons.instance.RegisterButton(
-				new MenuButton("BSChallenger", () =>
+				new MenuButton("BS Challenger", () =>
 				{
-					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(this);
+					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow);
 				}
 			));
 		}

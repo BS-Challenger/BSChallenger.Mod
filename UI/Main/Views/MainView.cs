@@ -6,6 +6,7 @@ using BSChallenger.API;
 using BSChallenger.Providers;
 using HMUI;
 using IPA.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -18,30 +19,40 @@ namespace BSChallenger.UI.Main.Views
 	[ViewDefinition("BSChallenger.UI.Main.Views.MainView")]
 	internal class MainView : BSMLAutomaticViewController
 	{
-		[Inject]
+		//Dependencies
 		private LevelView _levelView = null;
-		[Inject]
 		private BSChallengerFlowCoordinator _flow = null;
-		[Inject]
-		private RefreshTokenStorageProvider _refreshTokenStorageProvider = null;
+		private TokenStorageProvider _tokenStorageProvider = null;
+		private ChallengeRankingApiProvider _apiProvider = null;
 
-		[UIComponent("levelSelectListObj")]
+		//List
+		[UIComponent("level-select-list-obj")]
 		public CustomCellListTableData levelSelectListObj = null;
-		[UIValue("levelSelectList")]
+		[UIValue("level-select-list")]
 		internal List<object> levelSelection = new List<object>();
 
-		[UIComponent("levelProgListObj")]
+		//Progress
+		[UIComponent("level-prog-list-obj")]
 		public CustomCellListTableData levelProgListObj = null;
-		[UIValue("levelProgList")]
+		[UIValue("level-prog-list")]
 		internal List<object> levelsProgress = new List<object>();
 
-		[UIComponent("currentRankingImg")]
+		//Ranking Selection
+		[UIComponent("current-ranking-img")]
 		internal ImageView currentRankingImg = null;
-		[UIComponent("currentRankingTxt")]
+		[UIComponent("current-ranking-txt")]
 		internal TextMeshProUGUI currentRankingtxt = null;
-
 		internal Ranking currentRanking;
 		internal int rankingIdx = 0;
+
+		[Inject]
+		private void Construct(BSChallengerFlowCoordinator flowCoordinator, LevelView levelView, TokenStorageProvider refreshTokenStorageProvider, ChallengeRankingApiProvider challengeRankingApiProvider)
+		{
+			_flow = flowCoordinator;
+			_levelView = levelView;
+			_tokenStorageProvider = refreshTokenStorageProvider;
+			_apiProvider = challengeRankingApiProvider;
+		}
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -58,52 +69,57 @@ namespace BSChallenger.UI.Main.Views
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
+			if(currentRanking != null)
+			{
+				_flow.DistributeRanking(_flow.allRankings[0]);
+			}
 		}
 
 		internal void SetRanking(Ranking ranking)
 		{
 			currentRanking = ranking;
-			var levels = ranking.levels.OrderBy(x => x.levelNumber);
-			levelSelection = levels.Select(x => (object)new LeveSelectlUI(x)).ToList();
-			levelSelectListObj.data = levelSelection;
-			levelSelectListObj.tableView.ReloadData();
-			levelSelectListObj.tableView.SelectCellWithIdx(0);
+			if (ranking.Levels.Count > 0)
+			{
+				var levels = ranking.Levels.OrderBy(x => x.levelNumber);
+				levelSelection = levels.Select(x => (object)new LeveSelectlUI(x)).ToList();
+				levelSelectListObj.data = levelSelection;
+				levelSelectListObj.tableView.ReloadData();
+				levelSelectListObj.tableView.SelectCellWithIdx(0);
+			}
 			if (currentRanking != null)
 			{
-				currentRankingImg.SetImage(currentRanking.iconURL);
-				currentRankingtxt.text = currentRanking.name;
+				currentRankingImg.SetImage(currentRanking.IconURL);
+				currentRankingtxt.text = currentRanking.Name;
 			}
 		}
 
 		[UIAction("level-selected")]
 		private void LevelSelected(TableView view, LeveSelectlUI cell)
 		{
-			_levelView.SetLevel(cell.level);
+			_levelView.SetLevel(cell.level, currentRanking.Name);
 		}
 
-		[UIAction("LeftRanking")]
+		[UIAction("left-ranking")]
 		private void LeftRanking()
 		{
 			rankingIdx = Mathf.Max(rankingIdx - 1, 0);
 			_flow.DistributeRanking(_flow.allRankings[rankingIdx]);
 		}
 
-		[UIAction("RightRanking")]
+		[UIAction("right-ranking")]
 		private void RightRanking()
 		{
 			rankingIdx = Mathf.Min(rankingIdx + 1, _flow.allRankings.Count - 1);
 			_flow.DistributeRanking(_flow.allRankings[rankingIdx]);
 		}
 
-		[UIAction("OpenBeatleader")]
-		private void BeatLeader()
+		[UIAction("scan-level")]
+		private void Scan()
 		{
-			string token = _refreshTokenStorageProvider.GetRefreshToken();
-			_flow._apiProvider.AccessToken(token, (x) =>
+			string token = _tokenStorageProvider.GetToken();
+			_apiProvider.Scan(token, currentRanking.Identifier, (x) =>
 			{
-				_flow._apiProvider.Authenticate(x, (x) => {
-					Plugin.Log.Info(x);
-				});
+
 			});
 		}
 	}

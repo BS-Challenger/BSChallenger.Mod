@@ -6,10 +6,10 @@ using UnityEngine;
 namespace BSChallenger.Providers
 {
 	//Zips token because it makes me feel better
-	internal class RefreshTokenStorageProvider
+	internal class TokenStorageProvider
 	{
 		private static string TokenPath => Path.Combine(Application.persistentDataPath, "challengertoken");
-		internal void StoreRefreshToken(string token)
+		internal void StoreToken(string token)
 		{
 			Plugin.Log.Info(token);
 			var bytes = Encoding.UTF8.GetBytes(token);
@@ -22,11 +22,10 @@ namespace BSChallenger.Providers
 				var zippedBytes = memoryStream.ToArray();
 				File.Delete(TokenPath);
 				File.WriteAllBytes(TokenPath, zippedBytes);
-				Plugin.Log.Info("Storing: " + token);
 			}
 		}
 
-		internal string GetRefreshToken()
+		internal string GetToken()
 		{
 			var zippedBytes = File.ReadAllBytes(TokenPath);
 			using (var memoryStream = new MemoryStream(zippedBytes))
@@ -37,7 +36,6 @@ namespace BSChallenger.Providers
 					{
 						decompressStream.CopyTo(outputStream);
 					}
-					Plugin.Log.Info("Fetched: " + Encoding.UTF8.GetString(outputStream.ToArray()));
 					return Encoding.UTF8.GetString(outputStream.ToArray());
 				}
 			}

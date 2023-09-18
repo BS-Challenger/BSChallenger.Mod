@@ -3,15 +3,16 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.API;
+using BSChallenger.Providers;
 using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
-using SongDetailsCache.Structs;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace BSChallenger.UI.Main.Views
 {
@@ -19,12 +20,34 @@ namespace BSChallenger.UI.Main.Views
 	[ViewDefinition("BSChallenger.UI.Main.Views.LevelView")]
 	internal class LevelView : BSMLAutomaticViewController
 	{
+		//Dependencies
+		ChallengeRankingApiProvider _apiProvider = null;
+
+		//List
 		[UIComponent("mapsList")]
 		private CustomCellListTableData list = null;
 		[UIValue("maps")]
 		private List<object> maps = new List<object>();
+
+		//TopSection
 		[UIComponent("topText")]
 		private TextMeshProUGUI topText = null;
+
+		//Right Section
+		[UIComponent("coverBig")]
+		private ImageView coverBig = null;
+		[UIComponent("mapNameBig")]
+		private TextMeshProUGUI mapNameBig = null;
+		[UIComponent("mapperNameBig")]
+		private TextMeshProUGUI mapperNameBig = null;
+
+		private Map currentMap;
+
+		[Inject]
+		private void Construct(ChallengeRankingApiProvider challengeRankingApiProvider)
+		{
+			_apiProvider = challengeRankingApiProvider;
+		}
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -55,25 +78,89 @@ namespace BSChallenger.UI.Main.Views
 			StartCoroutine(SetRankingCoroutine(ranking));
 		}
 
-		internal void SetLevel(Level level)
+		internal void SetLevel(Level level, string rankingName)
 		{
 			topText.text = "Level: " + level.levelNumber;
-			maps = level.availableForPass.Select(x => (object)new MapUI(x)).ToList();
-			list.data = maps;
-			list.tableView.ReloadData();
-			list.tableView.SelectCellWithIdx(0);
+
+			HMMainThreadDispatcher.instance.Enqueue(() =>
+			{
+				maps = level.availableForPass.ConvertAll(x => (object)new MapUI(x));
+				list.data = maps;
+				list.tableView.ReloadData();
+				list.tableView.SelectCellWithIdx(0);
+				SetMap(((MapUI)maps[0]).map);
+			});
+		}
+
+		private void SetMap(Map map)
+		{
+			currentMap = map;
+			SongDetailsUtils.FetchBeatmap(map.hash, (x) =>
+			{
+				coverBig.SetImage(x.coverURL);
+				mapNameBig.text = x.songName;
+				mapperNameBig.text = "[<size=80%><color=#ff69b4>" + x.uploaderName + "</color></size>]";
+			});
+		}
+
+		[UIAction("go-to-mapper")]
+		private void GoToMapper()
+		{
+			if (currentMap != null)
+			{
+				SongDetailsUtils.FetchBeatmap(currentMap.hash, (x) =>
+				{
+					BeatSaverUtils.GetMapperID(x.uploaderName, (id) =>
+					{
+						Application.OpenURL("https://beatsaver.com/profile/" + id);
+					});
+				});
+			}
+		}
+
+		[UIAction("go-to-beatleader")]
+		private void GoToBeatleader()
+		{
+			if (currentMap != null)
+			{
+				BeatleaderUtils.GetLeaderboardID(currentMap.hash, (id) =>
+				{
+					Application.OpenURL("https://www.beatleader.xyz/leaderboard/global/" + id);
+				});
+			}
+		}
+
+		[UIAction("go-to-beatsaver")]
+		private void GoToBeatsaver()
+		{
+			if (currentMap != null)
+			{
+				SongDetailsUtils.FetchBeatmap(currentMap.hash, (x) =>
+				{
+					Application.OpenURL("https://beatsaver.com/maps/" + x.key);
+				});
+			}
+		}
+
+		[UIAction("map-selected")]
+		private void SelectMap(TableView view, MapUI cell)
+		{
+			SetMap(cell.map);
 		}
 
 		private IEnumerator SetRankingCoroutine(Ranking ranking)
 		{
 			yield return new WaitUntil(() => list != null);
-			SetLevel(ranking.levels[0]);
+			if (ranking.Levels.Count > 0)
+			{
+				SetLevel(ranking.Levels[0], ranking.Name);
+			}
 		}
 	}
 
 	internal class MapUI
 	{
-		private readonly Map map = null;
+		internal readonly Map map = null;
 
 		internal MapUI(Map map)
 		{

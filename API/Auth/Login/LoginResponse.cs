@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Contexts
+namespace BSChallenger.API.User
 {
-	internal class RankingContext
+	public class LoginResponse
 	{
+		public string Token { get; set; }
 	}
 }

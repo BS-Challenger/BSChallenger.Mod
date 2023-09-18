@@ -26,11 +26,9 @@ namespace BSChallenger.UI.Main
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
 		{
-			_apiProvider.FetchRankings((results) =>
+			_apiProvider.Rankings((results) =>
 			{
 				allRankings = results;
-				currentRanking = results[0];
-				DistributeRanking(currentRanking);
 			});
 			if (firstActivation)
 			{
@@ -42,6 +40,7 @@ namespace BSChallenger.UI.Main
 
 		internal void DistributeRanking(Ranking ranking)
 		{
+			currentRanking = ranking;
 			HMMainThreadDispatcher.instance.Enqueue(() => {
 				_levelView.SetRanking(ranking);
 				_mainView.SetRanking(ranking);

@@ -4,5 +4,6 @@
 	{
 		public int ID { get; set; }
 		public string Username { get; set; }
+		public string Avatar { get; set; }
 	}
 }

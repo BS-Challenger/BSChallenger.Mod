@@ -14,7 +14,7 @@ namespace BSChallenger.Providers
 	public class ChallengeRankingApiProvider
 	{
 		private readonly HttpClient httpClient = new HttpClient();
-		private const string BASE_URL = "https://BSChallenger.xyz/api/";
+		private const string BASE_URL = "https://localhost:8081/";
 
 		[Inject]
 		private TokenStorageProvider tokenStorageProvider = null;

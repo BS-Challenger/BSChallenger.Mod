@@ -23,7 +23,7 @@ namespace BSChallenger.UI.AuthorizationFlow
 			MenuButtons.instance.RegisterButton(
 				new MenuButton("BS Challenger", () =>
 				{
-					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow);
+					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(this);
 				}
 			));
 		}

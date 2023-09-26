@@ -55,14 +55,8 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 					{
 						await Task.Delay(50);
 					}
-					//Application.OpenURL("http://localhost:8081/mod-auth");
-					//string token = Console.ReadLine();
-					//Console.WriteLine(token);
-					//_tokenStorageProvider.StoreToken(token);
-					HMMainThreadDispatcher.instance.Enqueue(() =>
-					{
-						_authFlow.GoToRankingFlow();
-					});
+					Application.OpenURL("https://api.beatleader.xyz/oauth2/authorize?client_id=BSChallengerClientID&response_type=code&redirect_uri=https%3A%2F%2Flocalhost:8081/mod-auth&scope=profile");
+					_tokenStorageProvider.StoreToken("hi");
 				}
 			});
 		}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,32 +15,33 @@ namespace BSChallenger.Providers
 		private WebSocketServer server;
 		private static AuthWebsocketProvider _instance;
 		internal bool started = false;
+		private Action<string> _recieveToken;
 		public void Dispose()
 		{
 			started = false;
 			server.Stop();
 		}
 
-		public void Initialize()
+		public void Initialize(Action<string> onTokenRecieved)
 		{
 			_instance = this;
+			_recieveToken = onTokenRecieved;
 
-			server = new WebSocketServer("ws://localhost:3000");
+			server = new WebSocketServer("ws://0.0.0.0:8080");
 			server.AddWebSocketService<SocketBehavior>("/");
 			server.Start();
 			started = true;
 		}
 
-		private class SocketBehavior : WebSocketBehavior
+		private sealed class SocketBehavior : WebSocketBehavior
 		{
 			protected override void OnMessage(MessageEventArgs e)
 			{
-				Console.WriteLine(e.Data);
-				var msg = e.Data == "BALUS"
-						  ? "Are you kidding?"
-						  : "I'm not available now.";
-
-				Send(msg);
+				_instance._recieveToken(JsonConvert.DeserializeObject<TokenResult>(e.Data).Token);
+			}
+			private sealed class TokenResult
+			{
+				public string Token { get; set; }
 			}
 		}
 	}

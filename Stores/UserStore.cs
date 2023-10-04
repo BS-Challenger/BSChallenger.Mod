@@ -1,4 +1,5 @@
-﻿using BSChallenger.Utils;
+﻿using BSChallenger.API;
+using BSChallenger.Utils;
 using System;
 
 namespace BSChallenger.Stores
@@ -7,7 +8,7 @@ namespace BSChallenger.Stores
 	{
 		private User CurrentUser { get; set; }
 
-		public Result<UserModel> GetCurentUser()
+		public Result<User> GetCurentUser()
 		{
 			if (CurrentUser != null)
 			{
@@ -15,11 +16,11 @@ namespace BSChallenger.Stores
 			}
 			else
 			{
-				return Result.Fail<UserModel>("User is not authenticated!");
+				return Result.Fail<User>("User is not authenticated!");
 			}
 		}
 
-		public void SetUser(Action<UserModel> OnResult, Action OnError)
+		public void SetUser(Action<User> OnResult, Action OnError)
 		{
 			ApiProvider.GetUser(-1, (x) =>
 			{

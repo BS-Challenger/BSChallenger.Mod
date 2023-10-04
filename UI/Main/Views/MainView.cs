@@ -22,7 +22,6 @@ namespace BSChallenger.UI.Main.Views
 		//Dependencies
 		private LevelView _levelView = null;
 		private BSChallengerFlowCoordinator _flow = null;
-		private TokenStorageProvider _tokenStorageProvider = null;
 		private ChallengeRankingApiProvider _apiProvider = null;
 
 		//List
@@ -46,11 +45,10 @@ namespace BSChallenger.UI.Main.Views
 		internal int rankingIdx = 0;
 
 		[Inject]
-		private void Construct(BSChallengerFlowCoordinator flowCoordinator, LevelView levelView, TokenStorageProvider refreshTokenStorageProvider, ChallengeRankingApiProvider challengeRankingApiProvider)
+		private void Construct(BSChallengerFlowCoordinator flowCoordinator, LevelView levelView, ChallengeRankingApiProvider challengeRankingApiProvider)
 		{
 			_flow = flowCoordinator;
 			_levelView = levelView;
-			_tokenStorageProvider = refreshTokenStorageProvider;
 			_apiProvider = challengeRankingApiProvider;
 		}
 
@@ -116,8 +114,7 @@ namespace BSChallenger.UI.Main.Views
 		[UIAction("scan-level")]
 		private void Scan()
 		{
-			string token = _tokenStorageProvider.GetToken();
-			_apiProvider.Scan(token, currentRanking.Identifier, (x) =>
+			_apiProvider.Scan(currentRanking.Identifier, (x) =>
 			{
 
 			});

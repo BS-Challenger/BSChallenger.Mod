@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BSChallenger.API
 {
-	internal class User
+	public class User
 	{
+		public string Identifier { get; set; }
+		public int GuildId { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string IconURL { get; set; }
+		public bool Private { get; set; }
+		public bool Partnered { get; set; }
+		public List<Level> Levels { get; set; }
 	}
 }

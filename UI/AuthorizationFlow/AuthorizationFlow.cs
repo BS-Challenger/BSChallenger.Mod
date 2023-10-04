@@ -12,19 +12,14 @@ namespace BSChallenger.UI.AuthorizationFlow
 	{
 		private BSChallengerFlowCoordinator _rankingFlow;
 		private AuthView _authView;
-		internal ChallengeRankingApiProvider _apiProvider;
 
 		[Inject]
-		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator, ChallengeRankingApiProvider apiProvider)
+		internal void Construct(AuthView authViewController, BSChallengerFlowCoordinator rankingFlowCoordinator)
 		{
 			_authView = authViewController;
 			_rankingFlow = rankingFlowCoordinator;
-			_apiProvider = apiProvider;
 			MenuButtons.instance.RegisterButton(
-				new MenuButton("BS Challenger", () =>
-				{
-					BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(this);
-				}
+				new MenuButton("BS Challenger", () => BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(this)
 			));
 		}
 
@@ -40,8 +35,10 @@ namespace BSChallenger.UI.AuthorizationFlow
 
 		internal void GoToRankingFlow()
 		{
-			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal, true);
-			BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow, null, ViewController.AnimationDirection.Horizontal, true);
+			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, () =>
+			{
+				BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow, null, ViewController.AnimationDirection.Horizontal, true);
+			}, ViewController.AnimationDirection.Horizontal, true);
 		}
 
 		protected override void BackButtonWasPressed(ViewController topViewController)

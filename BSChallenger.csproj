@@ -11,7 +11,7 @@
     <RootNamespace>BSChallenger</RootNamespace>
     <AssemblyName>BSChallenger</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
@@ -138,22 +138,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Auth\Login\LoginRequest.cs" />
     <Compile Include="API\Level.cs" />
     <Compile Include="API\Map.cs" />
     <Compile Include="API\Ranking.cs" />
-    <Compile Include="API\Auth\BLTokenResponse.cs" />
-    <Compile Include="API\Auth\AuthenticatedRequest.cs" />
-    <Compile Include="API\Auth\IdentityResponse.cs" />
     <Compile Include="API\Auth\Scan\ScanResponse.cs" />
     <Compile Include="API\Auth\Scan\ScanRequest.cs" />
-    <Compile Include="API\Auth\Login\LoginResponse.cs" />
+    <Compile Include="API\User.cs" />
+    <Compile Include="API\Web\ErrorResponseModel.cs" />
     <Compile Include="Installers\BSChallengerMenuInstaller.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AuthWebsocketProvider.cs" />
     <Compile Include="Providers\ChallengeRankingApiProvider.cs" />
     <Compile Include="Providers\TokenStorageProvider.cs" />
+    <Compile Include="Stores\Store.cs" />
+    <Compile Include="Stores\UserStore.cs" />
     <Compile Include="UI\AuthorizationFlow\AuthorizationFlow.cs" />
     <Compile Include="UI\AuthorizationFlow\Views\AuthView.cs" />
     <Compile Include="UI\Main\BSChallengerFlowCoordinator.cs" />
@@ -162,6 +161,7 @@
     <Compile Include="UI\Main\Views\MainView.cs" />
     <Compile Include="Utils\BeatleaderUtils.cs" />
     <Compile Include="Utils\BeatSaverUtils.cs" />
+    <Compile Include="Utils\Result.cs" />
     <Compile Include="Utils\SongDetailsUtils.cs" />
     <Compile Include="Utils\BSMLUtils.cs" />
   </ItemGroup>

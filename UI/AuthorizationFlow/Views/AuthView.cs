@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BSChallenger.Providers;
+using BSChallenger.Stores;
 using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
@@ -24,6 +25,15 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		[Inject] private AuthorizationFlow _authFlow = null;
 
 		[Inject] private TokenStorageProvider _tokenStorageProvider = null;
+		internal ChallengeRankingApiProvider _apiProvider;
+
+		[Inject]
+		private void Construct(AuthorizationFlow authorizationFlow, TokenStorageProvider tokenStorageProvider, ChallengeRankingApiProvider apiProvider)
+		{
+			_authFlow = authorizationFlow;
+			_tokenStorageProvider = tokenStorageProvider;
+			_apiProvider = apiProvider;
+		}
 
 		[UIAction("#post-parse")]
 		internal void PostParse()
@@ -46,19 +56,48 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 		{
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
-			Task.Run(async () =>
+			//Action because uhhhh
+			var getNewToken = () =>
 			{
-				using (var websocket = new AuthWebsocketProvider())
+				var websocket = new AuthWebsocketProvider();
+				websocket.Initialize((x) =>
 				{
-					websocket.Initialize();
-					while (!websocket.started)
+					_tokenStorageProvider.StoreToken(x);
+					_apiProvider.ProvideToken(x);
+					var userStore = UserStore.Get();
+					if (!userStore.IsFailure)
 					{
-						await Task.Delay(50);
+						userStore.Value.SetUser(async _ => {
+							await Task.Delay(200);
+							HMMainThreadDispatcher.instance.Enqueue(() =>
+							{
+								_authFlow.GoToRankingFlow();
+							});
+						}, () => { });
 					}
-					Application.OpenURL("https://api.beatleader.xyz/oauth2/authorize?client_id=BSChallengerClientID&response_type=code&redirect_uri=https%3A%2F%2Flocalhost:8081/mod-auth&scope=profile");
-					_tokenStorageProvider.StoreToken("hi");
-				}
-			});
+				});
+				Application.OpenURL("http://localhost:8080/mod-auth");
+			};
+
+			var token = _tokenStorageProvider.GetToken();
+
+			if (!string.IsNullOrEmpty(token))
+			{
+				_apiProvider.ProvideToken(token);
+				var userStore = UserStore.Get();
+				userStore.Value.SetUser(async _ =>
+				{
+					await Task.Delay(200);
+					HMMainThreadDispatcher.instance.Enqueue(() =>
+					{
+						_authFlow.GoToRankingFlow();
+					});
+				}, () => getNewToken());
+			}
+			else
+			{
+				getNewToken();
+			}
 		}
 	}
 }

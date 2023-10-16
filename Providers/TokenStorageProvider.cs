@@ -11,7 +11,6 @@ namespace BSChallenger.Providers
 		private static string TokenPath => Path.Combine(Application.persistentDataPath, "challengertoken");
 		internal void StoreToken(string token)
 		{
-			Plugin.Log.Info(token);
 			var bytes = Encoding.UTF8.GetBytes(token);
 			using (var memoryStream = new MemoryStream())
 			{

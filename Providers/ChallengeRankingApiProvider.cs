@@ -14,7 +14,7 @@ namespace BSChallenger.Providers
 {
 	public class ChallengeRankingApiProvider
 	{
-		private const string BASE_URL = "https://localhost:8081/";
+		private const string BASE_URL = "http://localhost:8081/";
 		private readonly SiraLog _logger;
 		private readonly IHttpService _httpService;
 		public ChallengeRankingApiProvider(SiraLog siraLog, IHttpService httpService)
@@ -37,8 +37,7 @@ namespace BSChallenger.Providers
 
 		public void GetUser(long user, Action<User> callback, Action<ErrorResponseModel> errorCallback)
 		{
-			string url = user != -1 ? BASE_URL + "profile/" + user : BASE_URL + "profile/mod";
-			JsonHttpGetRequest(url, (res) =>
+			JsonHttpGetRequest(BASE_URL + "users/" + user, (res) =>
 			{
 				Console.WriteLine(res);
 				var userObj = JsonConvert.DeserializeObject<User>(res);

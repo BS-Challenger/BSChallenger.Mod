@@ -29,7 +29,7 @@ namespace BSChallenger.Stores
 			}, (err) =>
 			{
 				OnError();
-				Logger.Error($"Failed to get user with token because of error: {err?.ToString()}");
+				Logger.Error($"Failed to get user with token because of error: {err?.Message}");
 			});
 		}
 	}

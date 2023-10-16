@@ -67,7 +67,8 @@ namespace BSChallenger.UI.Main.Views
 				x.SetImage("#RoundRect10BorderFade");
 				x.color = new Color(1f, 1f, 1f, 0.4f);
 			}
-			if(currentRanking != null)
+			Console.WriteLine("x");
+			if (currentRanking != null)
 			{
 				_flow.DistributeRanking(_flow.allRankings[0]);
 			}
@@ -75,6 +76,7 @@ namespace BSChallenger.UI.Main.Views
 
 		internal void SetRanking(Ranking ranking)
 		{
+			Console.WriteLine("Setting ranking");
 			currentRanking = ranking;
 			if (ranking.Levels.Count > 0)
 			{

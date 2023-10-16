@@ -3,6 +3,7 @@ using BSChallenger.API;
 using BSChallenger.Providers;
 using BSChallenger.UI.Main.Views;
 using HMUI;
+using System;
 using System.Collections.Generic;
 using Zenject;
 
@@ -12,7 +13,7 @@ namespace BSChallenger.UI.Main
 	{
 		private MainView _mainView;
 		private LevelView _levelView;
-		internal ChallengeRankingApiProvider _apiProvider;
+		private ChallengeRankingApiProvider _apiProvider;
 		internal Ranking currentRanking;
 		internal List<Ranking> allRankings;
 
@@ -29,6 +30,7 @@ namespace BSChallenger.UI.Main
 			_apiProvider.Rankings((results) =>
 			{
 				allRankings = results;
+				Console.WriteLine("fetched rankings");
 			});
 			if (firstActivation)
 			{

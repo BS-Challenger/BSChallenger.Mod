@@ -4,6 +4,7 @@ using BSChallenger.Providers;
 using BSChallenger.UI.AuthorizationFlow.Views;
 using BSChallenger.UI.Main;
 using HMUI;
+using System.Threading.Tasks;
 using Zenject;
 
 namespace BSChallenger.UI.AuthorizationFlow
@@ -35,10 +36,7 @@ namespace BSChallenger.UI.AuthorizationFlow
 
 		internal void GoToRankingFlow()
 		{
-			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, () =>
-			{
-				BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_rankingFlow, null, ViewController.AnimationDirection.Horizontal, true);
-			}, ViewController.AnimationDirection.Horizontal, true);
+			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this);
 		}
 
 		protected override void BackButtonWasPressed(ViewController topViewController)

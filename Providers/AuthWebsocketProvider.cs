@@ -27,7 +27,7 @@ namespace BSChallenger.Providers
 			_instance = this;
 			_recieveToken = onTokenRecieved;
 
-			server = new WebSocketServer("ws://0.0.0.0:8080");
+			server = new WebSocketServer("ws://0.0.0.0:3000");
 			server.AddWebSocketService<SocketBehavior>("/");
 			server.Start();
 			started = true;

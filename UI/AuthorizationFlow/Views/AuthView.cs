@@ -8,6 +8,7 @@ using BSChallenger.Utils;
 using HMUI;
 using IPA.Utilities;
 using IPA.Utilities.Async;
+using SiraUtil.Logging;
 using System;
 using System.Collections;
 using System.Linq;
@@ -22,14 +23,15 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 	[ViewDefinition("BSChallenger.UI.AuthorizationFlow.Views.AuthView")]
 	internal class AuthView : BSMLAutomaticViewController
 	{
-		[Inject] private AuthorizationFlow _authFlow = null;
-
-		[Inject] private TokenStorageProvider _tokenStorageProvider = null;
-		internal ChallengeRankingApiProvider _apiProvider;
+		private AuthorizationFlow _authFlow = null;
+		private SiraLog _logger;
+		private TokenStorageProvider _tokenStorageProvider = null;
+		private ChallengeRankingApiProvider _apiProvider;
 
 		[Inject]
-		private void Construct(AuthorizationFlow authorizationFlow, TokenStorageProvider tokenStorageProvider, ChallengeRankingApiProvider apiProvider)
+		private void Construct(SiraLog logger, AuthorizationFlow authorizationFlow, TokenStorageProvider tokenStorageProvider, ChallengeRankingApiProvider apiProvider)
 		{
+			_logger = logger;
 			_authFlow = authorizationFlow;
 			_tokenStorageProvider = tokenStorageProvider;
 			_apiProvider = apiProvider;
@@ -76,23 +78,31 @@ namespace BSChallenger.UI.AuthorizationFlow.Views
 						}, () => { });
 					}
 				});
-				Application.OpenURL("http://localhost:8080/mod-auth");
+				Application.OpenURL("http://localhost:8081/mod-auth");
 			};
 
-			var token = _tokenStorageProvider.GetToken();
-
-			if (!string.IsNullOrEmpty(token))
+			if (_tokenStorageProvider.RefreshTokenExists())
 			{
-				_apiProvider.ProvideToken(token);
-				var userStore = UserStore.Get();
-				userStore.Value.SetUser(async _ =>
+				var token = _tokenStorageProvider.GetToken();
+
+				if (!string.IsNullOrEmpty(token))
 				{
-					await Task.Delay(200);
-					HMMainThreadDispatcher.instance.Enqueue(() =>
+					_apiProvider.ProvideToken(token);
+					var userStore = UserStore.Get();
+					userStore.Value.SetUser(async _ =>
 					{
-						_authFlow.GoToRankingFlow();
-					});
-				}, () => getNewToken());
+						await Task.Delay(200);
+						HMMainThreadDispatcher.instance.Enqueue(() =>
+						{
+							_logger.Info("x");
+							_authFlow.GoToRankingFlow();
+						});
+					}, () => getNewToken());
+				}
+				else
+				{
+					getNewToken();
+				}
 			}
 			else
 			{
